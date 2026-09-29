@@ -143,6 +143,7 @@ $('tour-back').addEventListener('click',()=>{if(tour.index>0){tour.index--;showT
 $('tour-skip').addEventListener('click',finishTour);
 $('walkthrough').addEventListener('cancel',e=>{e.preventDefault();finishTour();});
 $('replay-tour').addEventListener('click',()=>{$('help-dialog').close();startTour();});
+$('guide').addEventListener('click',startTour);
 window.addEventListener('resize',queueTourPosition);window.addEventListener('scroll',queueTourPosition,true);
 let seenTour=false;try{seenTour=localStorage.getItem(tourKey)==='seen';}catch{}
 if(!seenTour)requestAnimationFrame(startTour);
