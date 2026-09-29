@@ -1040,9 +1040,10 @@ window.WORKSHOP_DATA = {
               "title": "Before you begin",
               "items": [
                 "Open a Codex workspace that can run an application. Complete API setup before the exercise.",
-                "Check that your approved API project has billing or credits and access to Responses, GPT Image and GPT-Live. Resolve any model-access or organisation-verification requirements before starting. API usage is billed separately from ChatGPT.",
-                "Use secure setup to choose an authorised key or create one. Confirm where it will be stored; never paste it into chat or this website.",
+                "Click Copy workshop API key below to use the facilitator’s shared key for this exercise.",
+                "Save the copied key as OPENAI_API_KEY in your application’s local .env file or server secret settings. Do not paste it into the Codex conversation.",
                 "Keep OPENAI_API_KEY on the application server, outside browser code and source control.",
+                "Check Responses, GPT Image and GPT-Live access with the facilitator before starting. Report any billing, model-access or organisation-verification errors.",
                 "Have a microphone and headphones ready. Use a browser on HTTPS or localhost and allow microphone access when starting voice.",
                 "Agree limits for text requests, generated images and live voice minutes with the facilitator. End voice sessions after testing; voice duration and backend work are billed separately."
               ]

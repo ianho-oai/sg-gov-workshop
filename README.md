@@ -6,7 +6,7 @@ A self-contained workshop guide with downloadable resources, copyable prompts an
 
 ## Run locally or in Codex
 
-Requires **Node.js 20 or later**. There are no npm dependencies to install, no build step and no API key needed to run the guide.
+Requires **Node.js 20 or later**. There are no npm dependencies to install. The guide runs directly from `public/`; the shared API-key handout needs the facilitator credential in the ignored `.env.local` file.
 
 ```sh
 git clone https://github.com/ianho-oai/sg-gov-workshop.git
@@ -32,7 +32,7 @@ Use the environment's preview for port 3000. The included server is for developm
 
 The guide includes Gmail/Outlook setup choices, task objectives, expandable model prompts, resource downloads and a replayable walkthrough. It stores progress and walkthrough preferences in the current browser.
 
-This frontend is a guide: participants paste prompts and upload files into their own ChatGPT or Codex session. It does not connect to mailboxes, send messages, schedule tasks or call OpenAI APIs itself. Availability of plugins, models, live voice and scheduling depends on the participant's account; setup screenshots may differ from their interface. The Advanced API exercise requires a separately configured API project and server-side key, but the guide never requests or stores keys.
+This frontend is a guide: participants paste prompts and upload files into their own ChatGPT or Codex session. It does not connect to mailboxes, send messages, schedule tasks or call OpenAI APIs itself. Availability of plugins, models, live voice and scheduling depends on the participant's account; setup screenshots may differ from their interface. Advanced API setup includes **Copy workshop API key**. The facilitator explicitly authorized public distribution of this shared workshop key. Participants put it in their own application’s server-side `OPENAI_API_KEY` setting. See [the handoff](RESUME.md#hosting-and-boundaries) for publishing and key handling.
 
 ## Edit and check
 

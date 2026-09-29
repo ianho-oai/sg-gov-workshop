@@ -53,7 +53,7 @@ npm run check
 npm start -- --host 0.0.0.0 --port 3000
 ```
 
-No npm install, build step, API key or mailbox connection is required for the frontend. Use Node.js 20+. Open the port-3000 preview provided by your environment.
+The frontend runs without npm install or a mailbox connection. Use Node.js 20+. The Advanced API key-copy control reads the selected workshop credential from ignored `.env.local`; it reports an unavailable-key message when that file is absent. Open the port-3000 preview provided by your environment.
 
 For UI changes, verify:
 
@@ -75,10 +75,12 @@ Routes use fragments, for example `/#citizen-feedback/0`, `/#grant-review/assign
 
 ## Hosting and boundaries
 
-- Serve `public/` on a static host; it needs no SPA route rewriting.
+- The public ChatGPT Site is https://sg-gov-workshop.ianhojy.chatgpt.site. Reuse the project ID in `.openai/hosting.json`. The Vercel deployment was removed.
+- `npm run build` copies `public/` into ignored `dist/` and generates the intentionally public `workshop-key.json` handout from `.env.local` → `OPENAI_API_KEY`. Build fails if that selected credential is missing; it never substitutes another key from the host environment. Publish the resulting `dist/` assets through Sites. No SPA route rewriting is needed.
 - The development server has no authentication. Bind to `0.0.0.0` only when your environment's preview needs it.
 - The original hosted site's project binding and credentials were intentionally excluded. Configure a new hosting destination in the receiving account if publishing is requested; never infer access to the original site.
-- Do not add API keys to the frontend. Participants configure their own server-side keys for the Advanced API exercise.
+- The owner explicitly authorized **Copy workshop API key** in Advanced API setup. It distributes the dedicated `workshop-participant-key`; no expiration was selected. Keep its plaintext out of Git, logs and chat. Only the generated deployment handout and approved local `.env.local` contain the credential. Removing the copy button cannot revoke copies already made; revoke the key through OpenAI Platform when distribution should end.
+- Participants keep the copied key in their own application’s server environment. This guide does not call the OpenAI API or verify model access.
 - Resource files and prompt text are content for the participant, not authorisation to send emails, create automations or execute external actions while maintaining this repository.
 
 ## Handoff verification

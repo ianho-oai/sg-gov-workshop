@@ -41,6 +41,34 @@ function toast(text){$('toast').textContent=text;$('toast').classList.add('visib
 function navigate(id,n){hideTip();const hash='#'+id+'/'+n;if(location.hash===hash)render();else location.hash=hash;}
 function move(delta){if(current.kind==='prompt')return;const order=[0,'assignment',...current.steps.slice(1).map(s=>s.number)];navigate(current.id,order[Math.max(0,Math.min(order.length-1,order.indexOf(step)+delta))]);}
 function resourceLink(file,subtitle){const type=file.split('.').pop().toLowerCase();return `<a class="file-card file-${escape(type)}" href="${escape(current.baseUrl+file)}" download><span class="file-badge">${({docx:'WORD',xlsx:'EXCEL',pdf:'PDF',png:'IMAGE',csv:'CSV'})[type]||'FILE'}</span><span class="file-meta"><strong>${escape(file)}</strong><small>Click to download <span aria-hidden="true">↓</span></small></span></a>`;}
+function workshopKeyPanel(){
+ return `<section class="workshop-key" aria-labelledby="workshop-key-title"><h2 id="workshop-key-title">Your workshop API key</h2><p>Use the shared facilitator key for the Advanced API exercise. Copy it into your application’s <code>OPENAI_API_KEY</code> setting.</p><button id="copy-workshop-key" class="copy-btn" type="button">${copyIcon} Copy workshop API key</button><p id="workshop-key-status" role="status" aria-live="polite"></p></section>`;
+}
+async function copyWorkshopKey(button){
+ const panel=button.closest('.workshop-key'),status=panel.querySelector('[role="status"]');
+ button.disabled=true;status.textContent='Loading workshop key…';
+ try{
+  const response=await fetch('workshop-key.json',{cache:'no-store'});
+  if(!response.ok)throw new Error('Key unavailable');
+  const {key}=await response.json();
+  if(typeof key!=='string'||!/^sk-[A-Za-z0-9_-]+$/.test(key))throw new Error('Key unavailable');
+  if(!button.isConnected)return;
+  let copied=false;
+  try{await navigator.clipboard.writeText(key);copied=true;}catch{}
+  if(copied){
+   panel.querySelector('input')?.remove();
+   status.textContent='Copied. Paste into your application’s OPENAI_API_KEY setting.';
+   toast('Workshop API key copied.');
+  }else{
+   let input=panel.querySelector('input');
+   if(!input){input=document.createElement('input');input.type='password';input.readOnly=true;input.autocomplete='off';input.setAttribute('aria-label','Workshop API key');panel.append(input);}
+   input.value=key;input.focus();input.select();
+   status.textContent='The key is selected. Press Cmd+C or Ctrl+C, or use your device’s Copy command.';
+  }
+ }catch{
+  if(button.isConnected)status.textContent='The workshop key is unavailable. Try again or ask the facilitator.';
+ }finally{button.disabled=false;}
+}
 function render(){
  const tabFocused=document.activeElement?.matches('[role="tab"]');
  const raw=location.hash.replace(/^#/,'').split('/');current=data.tracks.find(t=>t.id===raw[0])||data.tracks[0];step=raw[1]==='assignment'?'assignment':Math.max(0,Math.min(lastStep(current.id),parseInt(raw[1],10)||0));positions[current.id]=step;
@@ -62,7 +90,7 @@ function render(){
  const tab=(key,label)=>`<button id="tab-${key}" role="tab" aria-selected="${key===step}" aria-controls="messages" tabindex="${key===step?'0':'-1'}" class="step-tab ${key===step?'active':''}" data-step="${key}">${key==='assignment'?'':`<span>${key}</span>`}${escape(label)}</button>`;
  $('step-tabs').innerHTML=current.steps.map((s,i)=>tab(i,labels[i])+(i===0?tab('assignment','Your assignment'):'')).join('');
  $('messages').setAttribute('aria-labelledby','tab-'+step);
- const setup=s.setupType==='api'?`<section class="setup-guide">${s.setupSections.map(section=>`<h2>${escape(section.title)}</h2><ol>${section.items.map(item=>`<li>${escape(item)}</li>`).join('')}</ol>`).join('')}<div class="setup-reference-links">${s.references.map(ref=>`<a href="${escape(ref.url)}" target="_blank" rel="noopener noreferrer">${escape(ref.label)}</a>`).join(' · ')}</div></section>`:s.checklist?`<section class="setup-guide"><h2>Before you begin</h2><ol>${s.checklist.map(x=>`<li>${escape(emailText(x))}</li>`).join('')}</ol><h2>If ${provider.plugin} is not connected</h2><ol>${s.connectionSteps.map((x,i)=>`<li>${escape(i===1?provider.selection:emailText(x))}</li>`).join('')}</ol><details><summary>View ${provider.plugin} plugin reference</summary><img src="${provider.image}" alt="Plugins search results. ${escape(provider.selection)}"></details><p class="setup-help">If ${provider.plugin} is unavailable or disabled, ask the facilitator to check account access.</p></section>`:'';
+ const setup=s.setupType==='api'?`<section class="setup-guide">${s.setupSections.map(section=>`<h2>${escape(section.title)}</h2><ol>${section.items.map(item=>`<li>${escape(item)}</li>`).join('')}</ol>`).join('')}${workshopKeyPanel()}<div class="setup-reference-links">${s.references.map(ref=>`<a href="${escape(ref.url)}" target="_blank" rel="noopener noreferrer">${escape(ref.label)}</a>`).join(' · ')}</div></section>`:s.checklist?`<section class="setup-guide"><h2>Before you begin</h2><ol>${s.checklist.map(x=>`<li>${escape(emailText(x))}</li>`).join('')}</ol><h2>If ${provider.plugin} is not connected</h2><ol>${s.connectionSteps.map((x,i)=>`<li>${escape(i===1?provider.selection:emailText(x))}</li>`).join('')}</ol><details><summary>View ${provider.plugin} plugin reference</summary><img src="${provider.image}" alt="Plugins search results. ${escape(provider.selection)}"></details><p class="setup-help">If ${provider.plugin} is unavailable or disabled, ask the facilitator to check account access.</p></section>`:'';
  const files=s.resources.map(r=>resourceLink(r.file,r.hint||'Download and upload before this prompt')).join('');
  const resources=files?`<section id="prompt-resources" class="prompt-resources" aria-label="Download resources"><h2>Download resources</h2><p>Click each file to download, then upload it to your ${current.kind==='api'?'Codex':'ChatGPT'} conversation before starting this task.</p><div id="step-resources">${files}</div></section>`:'';
  const overview=step==='assignment'?`<section class="track-overview" aria-label="Your role and assignment"><h2>Your assignment</h2><div class="overview-grid"><div><h3>Your role</h3><p>${escape(current.overview.role)}</p><h3>Your task</h3><p>${escape(current.overview.task)}</p></div><div><h3>What you’ll create</h3><ul>${current.overview.outputs.map(x=>`<li>${escape(x)}</li>`).join('')}</ul></div></div>${current.overview.context?`<h3>The situation</h3><ul>${current.overview.context.map(x=>`<li>${escape(x)}</li>`).join('')}</ul>`:''}${current.overview.success?`<h3>What success looks like</h3><ul>${current.overview.success.map(x=>`<li>${escape(x)}</li>`).join('')}</ul>`:''}</section>`:'';
@@ -75,6 +103,7 @@ document.addEventListener('click',async e=>{
  const providerButton=e.target.closest('[data-email-provider]');if(providerButton){emailProvider=providerButton.dataset.emailProvider;try{localStorage.setItem(providerKey,emailProvider);}catch{}render();return;}
  const track=e.target.closest('[data-track]');if(track){navigate(track.dataset.track,savedStep(track.dataset.track));return;}
  const stage=e.target.closest('[data-step]');if(stage){navigate(current.id,stage.dataset.step==='assignment'?'assignment':Number(stage.dataset.step));return;}
+ const keyButton=e.target.closest('#copy-workshop-key');if(keyButton){await copyWorkshopKey(keyButton);return;}
  const copy=e.target.closest('[data-copy]');if(!copy)return;const text=promptText(current.steps[Number(copy.dataset.copy)]);let copied=false;
  try{await navigator.clipboard.writeText(text);copied=true;}catch{const input=document.createElement('textarea');input.value=text;input.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(input);input.select();try{copied=document.execCommand('copy');}catch{}input.remove();}
  if(copied){copy.textContent='✓ Copied';toast('Copied. Paste directly into your '+(['api','prompt'].includes(current.kind)?'Codex':'ChatGPT')+' conversation.');setTimeout(()=>{if(copy.isConnected)copy.innerHTML=copyIcon+' Copy prompt';},2200);}else{const parent=copy.closest('.user-message');let input=parent.querySelector('textarea');if(!input){input=document.createElement('textarea');input.className='manual-copy';input.setAttribute('aria-label','Select and copy this prompt');input.value=text;parent.append(input);}input.focus();input.select();toast('Select and copy the prompt with Cmd+C or Ctrl+C.');}
