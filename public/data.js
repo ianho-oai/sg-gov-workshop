@@ -1111,6 +1111,7 @@ window.WORKSHOP_DATA = {
       "kind": "prompt",
       "name": "3D Singapore landmark",
       "description": "Create an editable Blender landmark and cinematic film.",
+      "caution": "3D modelling and rendering use a lot of CPU and can slow your computer. Run this workflow only at the end, after completing the rest of the workshop.",
       "files": [],
       "steps": [
         {

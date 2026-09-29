@@ -50,6 +50,8 @@ body{font-size:16px}.sidebar{width:280px}:root{--sidebar-width:280px}.brand{font
 .adventure-group{grid-column:1/-1;margin-bottom:9px}.adventure-group>summary{display:flex;align-items:center;gap:9px;padding:12px 10px;border-radius:9px;list-style:none;cursor:pointer;font-size:15px;font-weight:600;color:#ddd}.adventure-group>summary::-webkit-details-marker{display:none}.adventure-group>summary:hover{background:#222}.adventure-group.contains-active>summary{color:#c9f5e4}.adventure-chevron{width:14px;height:14px;flex:none;transition:transform .15s}.adventure-group[open] .adventure-chevron{transform:rotate(90deg)}.adventure-tracks{margin:4px 0 0 16px;padding-left:8px;border-left:1px solid #3b4943}.adventure-tracks .track-button{padding-left:10px}.adventure-tracks .chat-title{font-size:14px}@media(max-width:620px){.adventure-group>summary{font-size:15px}.adventure-tracks{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-left:10px}.adventure-tracks .chat-title{font-size:12px}}
 
 /* First-visit guided tour: real controls stay visible through a spotlight. */
+.workflow-caution{margin:0 0 22px;padding:18px 20px;border:1px solid #80652b;border-left:4px solid #e8b64e;border-radius:10px;background:#2a2315;color:#ffe3a3;font-size:16px;line-height:1.6}
+.workflow-caution strong{display:block}.workflow-caution p{margin:7px 0 0}
 .workshop-key{margin:22px 0;padding:20px;border:1px solid #444;border-radius:12px;background:#202020}
 .workshop-key h2{margin:0 0 8px}.workshop-key p{font-size:15px;line-height:1.6;color:#bbb}
 .workshop-key .copy-btn{white-space:normal;text-align:left}.workshop-key input{display:block;width:100%;margin-top:12px;padding:12px;background:#111;color:#eee;border:1px solid #555;border-radius:8px}

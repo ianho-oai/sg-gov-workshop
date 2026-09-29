@@ -82,7 +82,7 @@ function render(){
  if(promptOnly){
   step=0;positions[current.id]=0;
   $('messages').removeAttribute('aria-labelledby');$('messages').setAttribute('aria-label','Landmark prompt');
-  $('messages').innerHTML=`<section class="message-block"><div class="user-message"><div class="message-header"><strong>Landmark prompt</strong><button class="copy-btn" data-copy="0" aria-label="Copy landmark prompt">${copyIcon} Copy prompt</button></div><div class="prompt-content" id="prompt-0" tabindex="0" aria-label="Prompt text">${escape(current.steps[0].prompt).replace(escape("<insert your Singapore location here>"), '<mark class="location-placeholder" title="Replace this with your chosen Singapore location">'+escape("<insert your Singapore location here>")+'</mark>')}</div></div></section>`;
+  $('messages').innerHTML=`${current.caution?`<aside class="workflow-caution" role="note" aria-label="Caution"><strong>Caution — run this at the end</strong><p>${escape(current.caution)}</p></aside>`:''}<section class="message-block"><div class="user-message"><div class="message-header"><strong>Landmark prompt</strong><button class="copy-btn" data-copy="0" aria-label="Copy landmark prompt">${copyIcon} Copy prompt</button></div><div class="prompt-content" id="prompt-0" tabindex="0" aria-label="Prompt text">${escape(current.steps[0].prompt).replace(escape("<insert your Singapore location here>"), '<mark class="location-placeholder" title="Replace this with your chosen Singapore location">'+escape("<insert your Singapore location here>")+'</mark>')}</div></div></section>`;
   return;
  }
  $('messages').removeAttribute('aria-label');
