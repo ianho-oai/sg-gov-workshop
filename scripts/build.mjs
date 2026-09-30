@@ -20,7 +20,7 @@ await mkdir(new URL('.openai/', output), { recursive: true });
 const hosting = JSON.parse(await readFile(new URL('../.openai/hosting.json', import.meta.url), 'utf8'));
 if (hosting.static || hosting.d1 !== 'DB') throw new Error('Workshop password gate requires the DB Worker binding.');
 await writeFile(new URL('.openai/hosting.json', output), JSON.stringify(hosting, null, 2));
-await cp(new URL('../drizzle/', import.meta.url), new URL('.openai/drizzle/', output), { recursive: true });
+await cp(new URL('../drizzle/', import.meta.url), new URL('drizzle/', output), { recursive: true });
 const gateway = await readFile(new URL('../worker/key-access.js', import.meta.url), 'utf8');
 const entry = `${gateway}\nconst ASSETS = ${JSON.stringify(assets)};\nexport default {async fetch(request,env){
  const api = await handleApi(request,env); if(api) return api;
