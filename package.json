@@ -9,6 +9,6 @@
     "build": "node scripts/build.mjs",
     "start": "node scripts/serve.mjs",
     "dev": "node scripts/serve.mjs",
-    "check": "node --check public/app.js && node --check public/data.js && node --check scripts/serve.mjs && node --check scripts/workshop-key.mjs && node --check scripts/build.mjs && node scripts/check.mjs"
+    "check": "node --check public/app.js && node --check public/data.js && node --check scripts/serve.mjs && node --check scripts/build.mjs && node scripts/check.mjs"
   }
 }

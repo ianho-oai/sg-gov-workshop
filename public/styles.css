@@ -20,13 +20,12 @@ body{font-size:16px}.sidebar{width:280px}:root{--sidebar-width:280px}.brand{font
 .message-actions{justify-content:flex-end}
 
 /* Email preference applies to setup and copied prompts across every track. */
-.email-provider{display:flex;align-items:center;gap:14px;margin:0 0 22px;color:#aaa;font-size:15px}.provider-options{display:flex;gap:4px;padding:4px;background:#191919;border:1px solid #333;border-radius:12px}.provider-options button{border:0;border-radius:8px;background:transparent;color:#aaa;padding:9px 20px;font-size:15px}.provider-options button:hover{color:#fff;background:#252525}.provider-options button[aria-pressed="true"]{color:#fff;background:#363636;box-shadow:0 1px 3px #0004}@media(max-width:620px){.email-provider{font-size:14px;margin-bottom:18px}.provider-options button{font-size:14px;padding:9px 18px}}
 
 .task-objective{padding:18px 20px;margin:4px 0 24px;background:#191919;border:1px solid #3b3b3b;border-radius:12px}.task-objective h2,.proposed-prompt-heading{font-size:18px;line-height:1.5;font-weight:600;color:#f2f2f2;margin:0 0 10px}.task-objective p{font-size:18px;line-height:1.65;color:#ddd;margin:0}.proposed-prompt-heading{margin-bottom:14px}@media(max-width:620px){.task-objective{padding:16px;margin-bottom:20px}.task-objective h2,.task-objective p,.proposed-prompt-heading{font-size:16px}}
 
 .model-answer{margin-top:4px}.model-answer>summary{cursor:pointer;color:#eee;font-size:16px;font-weight:600;padding:12px 16px;border:1px solid #494949;border-radius:10px;width:fit-content;background:#292929}.model-answer>summary:hover{background:#333}.model-answer-content{padding-top:22px}.model-answer .collapse-label{display:none}.model-answer[open] .collapse-label{display:inline}.model-answer[open] .expand-label{display:none}@media(max-width:620px){.model-answer>summary{font-size:15px}}
 
-.email-provider[hidden]{display:none}.setup-reference-links{font-size:14px;margin-top:20px;line-height:1.8}.setup-reference-links a{text-underline-offset:3px}
+.setup-reference-links{font-size:14px;margin-top:20px;line-height:1.8}.setup-reference-links a{text-underline-offset:3px}
 
 .track-overview>.overview-grid+h3,.track-overview>ul+h3{margin-top:24px}
 
@@ -56,6 +55,7 @@ body{font-size:16px}.sidebar{width:280px}:root{--sidebar-width:280px}.brand{font
 .workshop-key h2{margin:0 0 8px}.workshop-key p{font-size:15px;line-height:1.6;color:#bbb}
 .workshop-key .copy-btn{white-space:normal;text-align:left}.workshop-key input{display:block;width:100%;margin-top:12px;padding:12px;background:#111;color:#eee;border:1px solid #555;border-radius:8px}
 .workshop-key [role="status"]{min-height:1.6em;margin-bottom:0}
+.api-bonus{margin-top:32px;padding-top:24px;border-top:1px solid #444}.api-bonus>h2{font-size:21px;line-height:1.4}.api-bonus>p{line-height:1.7;color:#ccc}
 .guide-button{margin-left:auto;min-height:44px;padding:10px 17px;border:1px solid #444;border-radius:10px;background:#202020;color:#ececec;font-size:15px;font-weight:600}
 .guide-button:hover{background:#303030;border-color:#666}
 @media(max-width:620px){.topbar{height:60px;padding:0 16px}.topbar .mode-switch{left:16px;top:50%;transform:translateY(-50%)}.guide-button{font-size:14px;padding:10px 14px}}
@@ -73,3 +73,5 @@ body{font-size:16px}.sidebar{width:280px}:root{--sidebar-width:280px}.brand{font
 #tour-card button:focus-visible{outline:2px solid #fff;outline-offset:3px}
 #tour-card button:hover:not(:disabled){filter:brightness(1.15)}
 @media(max-width:620px){#tour-card{padding:18px}#tour-card h2{font-size:21px}#tour-card p{font-size:15px;line-height:1.6}}
+
+.landmark-setup{margin-bottom:28px}.landmark-setup li{margin-bottom:12px}

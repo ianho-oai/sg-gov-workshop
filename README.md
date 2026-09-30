@@ -6,7 +6,7 @@ A self-contained workshop guide with downloadable resources, copyable prompts an
 
 ## Run locally or in Codex
 
-Requires **Node.js 20 or later**. There are no npm dependencies to install. The guide runs directly from `public/`; the shared API-key handout needs the facilitator credential in the ignored `.env.local` file.
+Requires **Node.js 20 or later**. There are no npm dependencies to install. The guide runs directly from `public/` and needs no credentials.
 
 ```sh
 git clone https://github.com/ianho-oai/sg-gov-workshop.git
@@ -28,11 +28,19 @@ Use the environment's preview for port 3000. The included server is for developm
 
 - **Choose your adventure:** Citizen feedback, Grant review, Scam education and JC Economics.
 - **Advanced API:** Build a customer-service assistant with text, image and live voice capabilities.
-- **3D Singapore landmark:** Copy a Blender creation prompt and insert your chosen location.
+- **3D Singapore landmark:** Follow the Blender/FFmpeg setup instructions, then copy the creation prompt and insert your chosen location. Run this CPU-intensive workflow at the end.
 
-The guide includes Gmail/Outlook setup choices, task objectives, expandable model prompts, resource downloads and a replayable walkthrough. It stores progress and walkthrough preferences in the current browser.
+Citizen feedback follows meeting summary → annotated image → costed proposal → historical analysis → dashboard → leadership email → daily automation → project site. The dashboard has an optional Responses API summary of filtered issues.
 
-This frontend is a guide: participants paste prompts and upload files into their own ChatGPT or Codex session. It does not connect to mailboxes, send messages, schedule tasks or call OpenAI APIs itself. Availability of plugins, models, live voice and scheduling depends on the participant's account; setup screenshots may differ from their interface. Advanced API setup includes **Copy workshop API key**. The facilitator explicitly authorized public distribution of this shared workshop key. Participants put it in their own application’s server-side `OPENAI_API_KEY` setting. See [the handoff](RESUME.md#hosting-and-boundaries) for publishing and key handling.
+Grant review is an Enterprise Singapore AI-grants exercise: criteria transcript → research and criteria visual → evaluation of 20 applicants → analysis of 300 past awards → comparison dashboard → five personalised acceptance emails → grant-process site. The data and scheme rules are fictional training inputs. Its dashboard includes the visualisation task.
+
+Scam education follows resident interviews → intervention mindmap → researched proposal → survey analysis → self-service analytics site with an optional Responses API comment summary → director email draft → daily global scam watch.
+
+JC Economics follows learning outcomes and readings → student question map → referenced answers and individual focus plans → department feedback analysis → published dashboard → Head of Department email draft → weekly economics news email automation.
+
+The guide includes Gmail setup instructions, task objectives, expandable model prompts, resource downloads and a replayable walkthrough. It stores progress and walkthrough preferences in the current browser.
+
+This frontend is a guide: participants paste prompts and upload files into their own ChatGPT or Codex session. It does not connect to mailboxes, send messages, schedule tasks or call OpenAI APIs itself. Availability of plugins, models, live voice and scheduling depends on the participant's account; setup screenshots may differ from their interface. API exercises use participants’ own keys or credentials supplied privately by the facilitator, stored in their application’s server environment. This guide neither serves nor publishes credentials.
 
 ## Edit and check
 
@@ -40,7 +48,7 @@ This frontend is a guide: participants paste prompts and upload files into their
 | --- | --- |
 | `public/index.html` | Page structure |
 | `public/styles.css` | Layout, colours and walkthrough styling |
-| `public/app.js` | Navigation, email toggle, copying and walkthrough |
+| `public/app.js` | Navigation, copying and walkthrough |
 | `public/data.js` | Track descriptions, tasks and prompts |
 | `public/packs/` | Individual downloadable documents, workbooks, images and CSVs |
 | `public/downloads/` | Resource-pack ZIPs |
@@ -53,4 +61,4 @@ npm run check
 
 This validates JavaScript syntax and every resource referenced by the workshop data. After UI changes, check the walkthrough and normal navigation at desktop and mobile widths. If you change a resource in `public/packs/`, also update its matching archive in `public/downloads/`.
 
-The repository contains the portable frontend and resources. It has no binding to the original Sites project and no deployment credentials.
+The repository contains the frontend, resources and current Sites project binding. Credentials remain outside Git. Publishing copies only `public/` assets into `dist/`; no key handout is generated. See RESUME.md.

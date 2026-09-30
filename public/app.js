@@ -8,20 +8,8 @@ const adventureIds=new Set(['citizen-feedback','grant-review','scam-education','
 let positions={},current=data.tracks[0],step=0,toastTimer=null,tipTimer=null,dismissedTip=null;
 try{const saved=JSON.parse(localStorage.getItem(storageKey)||JSON.stringify(Object.fromEntries(Object.entries(JSON.parse(localStorage.getItem('sg-workshop-sessions-v2')||'{}')).map(([k,v])=>[k,v+1]))));if(saved&&typeof saved==='object'&&!Array.isArray(saved))positions=saved;}catch{}
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const providerKey='sg-workshop-email-provider';
-const providers={
- gmail:{label:'Gmail',plugin:'Gmail',account:'Google',image:'assets/gmail-setup.png',selection:'Select Gmail — Read and manage Gmail, as shown below.'},
- outlook:{label:'Outlook',plugin:'Outlook Email',account:'Microsoft',image:'assets/outlook-setup.png',selection:'Select Outlook Email — Triage Outlook inboxes, as shown below. Use the + beside Outlook Email.'}
-};
-let emailProvider='gmail';
-try{const saved=localStorage.getItem(providerKey);if(Object.hasOwn(providers,saved))emailProvider=saved;}catch{}
-function emailText(text){return text.replace(/Gmail/g,providers[emailProvider].plugin).replace(/Google account/g,providers[emailProvider].account+' account');}
-function promptText(s){
- let text=s.prompt.replace(/copy into Outlook/g,'copy into '+providers[emailProvider].label);
- if(s.number===9)text=emailText(text);
- if(current.kind!=='api'&&s.number===7)text+='\n- After checking for duplicates and applying the review rules above, use the '+providers[emailProvider].plugin+' plugin to save eligible drafts when the source permits mailbox drafts and a usable recipient is available. Otherwise keep them in the Word draft file. Record the actual outcome; do not claim a mailbox draft exists if it was not saved. Do not send them.';
- return text;
-}
+const provider={plugin:'Gmail',image:'assets/gmail-setup.png',selection:'Select Gmail — Read and manage Gmail, as shown below.'};
+function promptText(s){return s.prompt;}
 const copyIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>';
 const features=[
  {id:'new-chat',name:'New chat',icon:'<path d="M12 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-7M16 3l5 5M10 14l-1 4 4-1L22 8l-5-5z"/>',description:'Start a fresh conversation for a new question or task.',example:'For this workshop, use a separate chat for each track and keep its prompts together.'},
@@ -41,39 +29,14 @@ function toast(text){$('toast').textContent=text;$('toast').classList.add('visib
 function navigate(id,n){hideTip();const hash='#'+id+'/'+n;if(location.hash===hash)render();else location.hash=hash;}
 function move(delta){if(current.kind==='prompt')return;const order=[0,'assignment',...current.steps.slice(1).map(s=>s.number)];navigate(current.id,order[Math.max(0,Math.min(order.length-1,order.indexOf(step)+delta))]);}
 function resourceLink(file,subtitle){const type=file.split('.').pop().toLowerCase();return `<a class="file-card file-${escape(type)}" href="${escape(current.baseUrl+file)}" download><span class="file-badge">${({docx:'WORD',xlsx:'EXCEL',pdf:'PDF',png:'IMAGE',csv:'CSV'})[type]||'FILE'}</span><span class="file-meta"><strong>${escape(file)}</strong><small>Click to download <span aria-hidden="true">↓</span></small></span></a>`;}
-function workshopKeyPanel(){
- return `<section class="workshop-key" aria-labelledby="workshop-key-title"><h2 id="workshop-key-title">Your workshop API key</h2><p>Use the shared facilitator key for the Advanced API exercise. Copy it into your application’s <code>OPENAI_API_KEY</code> setting.</p><button id="copy-workshop-key" class="copy-btn" type="button">${copyIcon} Copy workshop API key</button><p id="workshop-key-status" role="status" aria-live="polite"></p></section>`;
-}
-async function copyWorkshopKey(button){
- const panel=button.closest('.workshop-key'),status=panel.querySelector('[role="status"]');
- button.disabled=true;status.textContent='Loading workshop key…';
- try{
-  const response=await fetch('workshop-key.json',{cache:'no-store'});
-  if(!response.ok)throw new Error('Key unavailable');
-  const {key}=await response.json();
-  if(typeof key!=='string'||!/^sk-[A-Za-z0-9_-]+$/.test(key))throw new Error('Key unavailable');
-  if(!button.isConnected)return;
-  let copied=false;
-  try{await navigator.clipboard.writeText(key);copied=true;}catch{}
-  if(copied){
-   panel.querySelector('input')?.remove();
-   status.textContent='Copied. Paste into your application’s OPENAI_API_KEY setting.';
-   toast('Workshop API key copied.');
-  }else{
-   let input=panel.querySelector('input');
-   if(!input){input=document.createElement('input');input.type='password';input.readOnly=true;input.autocomplete='off';input.setAttribute('aria-label','Workshop API key');panel.append(input);}
-   input.value=key;input.focus();input.select();
-   status.textContent='The key is selected. Press Cmd+C or Ctrl+C, or use your device’s Copy command.';
-  }
- }catch{
-  if(button.isConnected)status.textContent='The workshop key is unavailable. Try again or ask the facilitator.';
- }finally{button.disabled=false;}
+function workshopKeyPanel(exercise='Advanced API exercise'){
+ return `<section class="workshop-key" aria-labelledby="workshop-key-title"><h2 id="workshop-key-title">Set up your API key</h2><p>For the ${escape(exercise)}, use your own project key or obtain an exercise key privately from the facilitator. Save it in your application’s server-side <code>OPENAI_API_KEY</code> setting, outside browser code and source control.</p><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">Open API key settings</a></section>`;
 }
 function render(){
  const tabFocused=document.activeElement?.matches('[role="tab"]');
  const raw=location.hash.replace(/^#/,'').split('/');current=data.tracks.find(t=>t.id===raw[0])||data.tracks[0];step=raw[1]==='assignment'?'assignment':Math.max(0,Math.min(lastStep(current.id),parseInt(raw[1],10)||0));positions[current.id]=step;
  try{localStorage.setItem(storageKey,JSON.stringify(positions));}catch{}
- const s=step==='assignment'?{resources:[],prompt:''}:current.steps[step],provider=providers[emailProvider];document.querySelector('.email-provider').hidden=['api','prompt'].includes(current.kind);document.querySelector('.prompt-pagination>div>span').textContent='Continue in the same '+(['api','prompt'].includes(current.kind)?'Codex':'ChatGPT')+' conversation';for(const button of document.querySelectorAll('[data-email-provider]'))button.setAttribute('aria-pressed',String(button.dataset.emailProvider===emailProvider));document.title=current.name+' · Workshop chat';$('track-title').textContent=current.name;$('track-description').textContent=current.description;
+ const s=step==='assignment'?{resources:[],prompt:''}:current.steps[step];document.querySelector('.prompt-pagination>div>span').textContent='Continue in the same '+(['api','prompt'].includes(current.kind)?'Codex':'ChatGPT')+' conversation';document.title=current.name+' · Workshop chat';$('track-title').textContent=current.name;$('track-description').textContent=current.description;
  const trackButton=t=>`<button class="track-button ${t.id===current.id?'active':''}" data-track="${t.id}" ${t.id===current.id?'aria-current="page"':''}><span class="chat-title">${escape(t.name)}</span><span class="session-position">${t.kind==='prompt'?'Prompt':savedStep(t.id)===0?'Setup':savedStep(t.id)==='assignment'?'Assignment':savedStep(t.id)+'/'+lastStep(t.id)}</span></button>`;
  $('track-nav').innerHTML=`<details id="adventure-group" class="adventure-group ${adventureIds.has(current.id)?'contains-active':''}" ${adventureOpen?'open':''}><summary><svg class="adventure-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg><span>Choose your adventure</span></summary><div class="adventure-tracks">${data.tracks.filter(t=>adventureIds.has(t.id)).map(trackButton).join('')}</div></details>${data.tracks.filter(t=>!adventureIds.has(t.id)).map(trackButton).join('')}`;
  $('adventure-group').addEventListener('toggle',e=>{if(e.target.isConnected)adventureOpen=e.target.open;});
@@ -82,7 +45,7 @@ function render(){
  if(promptOnly){
   step=0;positions[current.id]=0;
   $('messages').removeAttribute('aria-labelledby');$('messages').setAttribute('aria-label','Landmark prompt');
-  $('messages').innerHTML=`${current.caution?`<aside class="workflow-caution" role="note" aria-label="Caution"><strong>Caution — run this at the end</strong><p>${escape(current.caution)}</p></aside>`:''}<section class="message-block"><div class="user-message"><div class="message-header"><strong>Landmark prompt</strong><button class="copy-btn" data-copy="0" aria-label="Copy landmark prompt">${copyIcon} Copy prompt</button></div><div class="prompt-content" id="prompt-0" tabindex="0" aria-label="Prompt text">${escape(current.steps[0].prompt).replace(escape("<insert your Singapore location here>"), '<mark class="location-placeholder" title="Replace this with your chosen Singapore location">'+escape("<insert your Singapore location here>")+'</mark>')}</div></div></section>`;
+  $('messages').innerHTML=`${current.caution?`<aside class="workflow-caution" role="note" aria-label="Caution"><strong>Caution — run this at the end</strong><p>${escape(current.caution)}</p></aside>`:''}${current.setupInstructions?`<section class="setup-guide landmark-setup"><h2>Tools Codex should download and set up</h2><ol>${current.setupInstructions.map(item=>`<li>${escape(item)}</li>`).join('')}</ol><p>These setup instructions are included in the copyable prompt below.</p></section>`:''}<section class="message-block"><div class="user-message"><div class="message-header"><strong>Landmark prompt</strong><button class="copy-btn" data-copy="0" aria-label="Copy landmark prompt">${copyIcon} Copy prompt</button></div><div class="prompt-content" id="prompt-0" tabindex="0" aria-label="Prompt text">${escape(current.steps[0].prompt).replace(escape("<insert your Singapore location here>"), '<mark class="location-placeholder" title="Replace this with your chosen Singapore location">'+escape("<insert your Singapore location here>")+'</mark>')}</div></div></section>`;
   return;
  }
  $('messages').removeAttribute('aria-label');
@@ -90,26 +53,28 @@ function render(){
  const tab=(key,label)=>`<button id="tab-${key}" role="tab" aria-selected="${key===step}" aria-controls="messages" tabindex="${key===step?'0':'-1'}" class="step-tab ${key===step?'active':''}" data-step="${key}">${key==='assignment'?'':`<span>${key}</span>`}${escape(label)}</button>`;
  $('step-tabs').innerHTML=current.steps.map((s,i)=>tab(i,labels[i])+(i===0?tab('assignment','Your assignment'):'')).join('');
  $('messages').setAttribute('aria-labelledby','tab-'+step);
- const setup=s.setupType==='api'?`<section class="setup-guide">${s.setupSections.map(section=>`<h2>${escape(section.title)}</h2><ol>${section.items.map(item=>`<li>${escape(item)}</li>`).join('')}</ol>`).join('')}${workshopKeyPanel()}<div class="setup-reference-links">${s.references.map(ref=>`<a href="${escape(ref.url)}" target="_blank" rel="noopener noreferrer">${escape(ref.label)}</a>`).join(' · ')}</div></section>`:s.checklist?`<section class="setup-guide"><h2>Before you begin</h2><ol>${s.checklist.map(x=>`<li>${escape(emailText(x))}</li>`).join('')}</ol><h2>If ${provider.plugin} is not connected</h2><ol>${s.connectionSteps.map((x,i)=>`<li>${escape(i===1?provider.selection:emailText(x))}</li>`).join('')}</ol><details><summary>View ${provider.plugin} plugin reference</summary><img src="${provider.image}" alt="Plugins search results. ${escape(provider.selection)}"></details><p class="setup-help">If ${provider.plugin} is unavailable or disabled, ask the facilitator to check account access.</p></section>`:'';
+ const setup=s.setupType==='api'?`<section class="setup-guide">${s.setupSections.map(section=>`<h2>${escape(section.title)}</h2><ol>${section.items.map(item=>`<li>${escape(item)}</li>`).join('')}</ol>`).join('')}${workshopKeyPanel()}<div class="setup-reference-links">${s.references.map(ref=>`<a href="${escape(ref.url)}" target="_blank" rel="noopener noreferrer">${escape(ref.label)}</a>`).join(' · ')}</div></section>`:s.checklist?`<section class="setup-guide"><h2>Before you begin</h2><ol>${s.checklist.map(x=>`<li>${escape(x)}</li>`).join('')}</ol><h2>If ${provider.plugin} is not connected</h2><ol>${s.connectionSteps.map((x,i)=>`<li>${escape(i===1?provider.selection:x)}</li>`).join('')}</ol><details><summary>View ${provider.plugin} plugin reference</summary><img src="${provider.image}" alt="Plugins search results. ${escape(provider.selection)}"></details><p class="setup-help">If ${provider.plugin} is unavailable or disabled, ask the facilitator to check account access.</p></section>`:'';
  const files=s.resources.map(r=>resourceLink(r.file,r.hint||'Download and upload before this prompt')).join('');
  const resources=files?`<section id="prompt-resources" class="prompt-resources" aria-label="Download resources"><h2>Download resources</h2><p>Click each file to download, then upload it to your ${current.kind==='api'?'Codex':'ChatGPT'} conversation before starting this task.</p><div id="step-resources">${files}</div></section>`:'';
  const overview=step==='assignment'?`<section class="track-overview" aria-label="Your role and assignment"><h2>Your assignment</h2><div class="overview-grid"><div><h3>Your role</h3><p>${escape(current.overview.role)}</p><h3>Your task</h3><p>${escape(current.overview.task)}</p></div><div><h3>What you’ll create</h3><ul>${current.overview.outputs.map(x=>`<li>${escape(x)}</li>`).join('')}</ul></div></div>${current.overview.context?`<h3>The situation</h3><ul>${current.overview.context.map(x=>`<li>${escape(x)}</li>`).join('')}</ul>`:''}${current.overview.success?`<h3>What success looks like</h3><ul>${current.overview.success.map(x=>`<li>${escape(x)}</li>`).join('')}</ul>`:''}</section>`:'';
  $('messages').innerHTML=step==='assignment'?overview:`<section class="message-block" id="message-${step}"><div class="user-message"><div class="message-header"><strong>${escape(s.name)}</strong><span>~${s.minutes} min</span></div>${setup}${resources}${step>0&&s.prompt?`<section class="task-objective" aria-labelledby="task-heading-${step}"><h2 id="task-heading-${step}">Your Task:</h2>${s.situation?`<h3>Situation</h3><p>${escape(s.situation)}</p><h3>Objective</h3>`:''}<p>${escape(s.objective)}</p>${s.deliverables?`<h3>What to produce</h3><ul>${s.deliverables.map(item=>`<li>${escape(item)}</li>`).join('')}</ul>`:''}</section><details class="model-answer"><summary><span class="expand-label">Expand model answer</span><span class="collapse-label">Collapse model answer</span></summary><div class="model-answer-content"><h2 class="proposed-prompt-heading">Proposed Prompt:</h2><div class="prompt-content" id="prompt-${step}" tabindex="0" aria-label="Prompt text">${escape(promptText(s))}</div><div class="message-actions"><button class="copy-btn" data-copy="${step}" aria-label="Copy ${escape(s.name)} prompt">${copyIcon} Copy prompt</button></div></div></details>`:''}</div></section>`;
+ if(s.apiBonus){
+  const bonus=s.apiBonus;
+  $('messages').querySelector('.user-message').insertAdjacentHTML('beforeend',`<section class="api-bonus" aria-labelledby="api-bonus-title"><h2 id="api-bonus-title">${escape(bonus.title)}</h2><p>${escape(bonus.objective)}</p>${workshopKeyPanel('dashboard bonus')}<details class="model-answer"><summary><span class="expand-label">Expand bonus model answer</span><span class="collapse-label">Collapse bonus model answer</span></summary><div class="model-answer-content"><h2 class="proposed-prompt-heading">Bonus Prompt:</h2><div class="prompt-content" tabindex="0" aria-label="Bonus prompt text">${escape(bonus.prompt)}</div><div class="message-actions"><button class="copy-btn" data-copy-bonus="${step}" aria-label="Copy dashboard bonus prompt">${copyIcon} Copy prompt</button></div></div></details></section>`);
+ }
  $('step-count').textContent=step==='assignment'?'Your assignment':step===0?'Step 0 · Setup':'Step '+step+' of '+lastStep(current.id);$('previous').disabled=step===0;$('next').disabled=step===lastStep(current.id);
  if(tabFocused){$('tab-'+step).focus({preventScroll:true});$('tab-'+step).scrollIntoView({block:'nearest',inline:'nearest'});}
 }
 document.addEventListener('click',async e=>{
  if(!e.target.closest('[data-feature],#feature-popover'))hideTip();
- const providerButton=e.target.closest('[data-email-provider]');if(providerButton){emailProvider=providerButton.dataset.emailProvider;try{localStorage.setItem(providerKey,emailProvider);}catch{}render();return;}
  const track=e.target.closest('[data-track]');if(track){navigate(track.dataset.track,savedStep(track.dataset.track));return;}
  const stage=e.target.closest('[data-step]');if(stage){navigate(current.id,stage.dataset.step==='assignment'?'assignment':Number(stage.dataset.step));return;}
- const keyButton=e.target.closest('#copy-workshop-key');if(keyButton){await copyWorkshopKey(keyButton);return;}
- const copy=e.target.closest('[data-copy]');if(!copy)return;const text=promptText(current.steps[Number(copy.dataset.copy)]);let copied=false;
+ const copy=e.target.closest('[data-copy],[data-copy-bonus]');if(!copy)return;const text=copy.hasAttribute('data-copy-bonus')?current.steps[Number(copy.dataset.copyBonus)].apiBonus.prompt:promptText(current.steps[Number(copy.dataset.copy)]);let copied=false;
  try{await navigator.clipboard.writeText(text);copied=true;}catch{const input=document.createElement('textarea');input.value=text;input.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(input);input.select();try{copied=document.execCommand('copy');}catch{}input.remove();}
  if(copied){copy.textContent='✓ Copied';toast('Copied. Paste directly into your '+(['api','prompt'].includes(current.kind)?'Codex':'ChatGPT')+' conversation.');setTimeout(()=>{if(copy.isConnected)copy.innerHTML=copyIcon+' Copy prompt';},2200);}else{const parent=copy.closest('.user-message');let input=parent.querySelector('textarea');if(!input){input=document.createElement('textarea');input.className='manual-copy';input.setAttribute('aria-label','Select and copy this prompt');input.value=text;parent.append(input);}input.focus();input.select();toast('Select and copy the prompt with Cmd+C or Ctrl+C.');}
 });
 $('previous').addEventListener('click',()=>move(-1));$('next').addEventListener('click',()=>move(1));
-document.addEventListener('keydown',e=>{if(tour)return;if(e.key==='Escape'){dismissedTip=document.activeElement?.dataset.feature;hideTip();return;}if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||$('help-dialog').open||e.target.closest('input,textarea,[contenteditable="true"],.prompt-content,[data-email-provider]'))return;if(e.target.matches('[role="tab"]')&&(e.key==='Home'||e.key==='End')){e.preventDefault();navigate(current.id,e.key==='Home'?0:lastStep(current.id));return;}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();move(e.key==='ArrowLeft'?-1:1);}});
+document.addEventListener('keydown',e=>{if(tour)return;if(e.key==='Escape'){dismissedTip=document.activeElement?.dataset.feature;hideTip();return;}if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||$('help-dialog').open||e.target.closest('input,textarea,[contenteditable="true"],.prompt-content'))return;if(e.target.matches('[role="tab"]')&&(e.key==='Home'||e.key==='End')){e.preventDefault();navigate(current.id,e.key==='Home'?0:lastStep(current.id));return;}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();move(e.key==='ArrowLeft'?-1:1);}});
 $('reset').addEventListener('click',()=>{positions={};try{localStorage.removeItem(storageKey);}catch{}navigate(current.id,0);toast('Session progress reset.');});
 $('help').addEventListener('click',()=>$('help-dialog').showModal());$('close-help').addEventListener('click',()=>$('help-dialog').close());$('understood').addEventListener('click',()=>$('help-dialog').close());window.addEventListener('hashchange',()=>{if(tour)finishTour();render();});render();
 

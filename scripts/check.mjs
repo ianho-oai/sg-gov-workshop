@@ -6,10 +6,13 @@ import assert from 'node:assert/strict';
 const root=fileURLToPath(new URL('../public/',import.meta.url));
 const context={window:{}};
 runInNewContext(await readFile(resolve(root,'data.js'),'utf8'),context);
-const files=new Set(['index.html','app.js','styles.css','data.js','assets/gmail-setup.png','assets/outlook-setup.png']);
+const files=new Set(['index.html','app.js','styles.css','data.js','assets/gmail-setup.png']);
 const tracks=context.window.WORKSHOP_DATA.tracks;
 assert.equal(tracks.length,6,'Expected six workshop tracks');
 for(const track of tracks){
+ assert(track.steps.every((step,index)=>step.number===index),`${track.id}: step numbers must match their navigation positions`);
+ if(track.stepLabels)assert.equal(track.stepLabels.length,track.steps.length,`${track.id}: every step needs a tab label`);
+ for(const file of track.files||[])files.add(track.baseUrl+file);
  for(const step of track.steps)for(const resource of step.resources||[])files.add(track.baseUrl+resource.file);
  if(track.kind!=='prompt')files.add(`downloads/${track.id}.zip`);
 }

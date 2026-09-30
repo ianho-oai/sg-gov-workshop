@@ -2,7 +2,6 @@ import {createServer} from 'node:http';
 import {readFile, stat} from 'node:fs/promises';
 import {resolve, extname, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {readWorkshopKey} from './workshop-key.mjs';
 
 const root=fileURLToPath(new URL('../public/',import.meta.url));
 const args=process.argv.slice(2);
@@ -15,11 +14,6 @@ const server=createServer(async(req,res)=>{
  if(!['GET','HEAD'].includes(req.method)){res.writeHead(405,{'Allow':'GET, HEAD'});res.end();return;}
  try{
   let path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
-  if(path==='/workshop-key.json'){
-   const body=JSON.stringify({key:await readWorkshopKey()});
-   res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});
-   res.end(req.method==='HEAD'?undefined:body);return;
-  }
   if(path==='/'||path.endsWith('/'))path+='index.html';
   const file=resolve(root,'.'+path);
   if(!file.startsWith(resolve(root)+sep)||path.split('/').some(p=>p.startsWith('.'))){res.writeHead(403);res.end('Forbidden');return;}
