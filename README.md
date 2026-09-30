@@ -6,7 +6,7 @@ A self-contained workshop guide with downloadable resources, copyable prompts an
 
 ## Run locally or in Codex
 
-Requires **Node.js 20 or later**. No dependencies or credentials are needed to run the guide.
+Requires **Node.js 22.16 or later**. No dependencies or credentials are needed to run the guide.
 
 ```sh
 git clone https://github.com/ianho-oai/sg-gov-workshop.git
@@ -22,7 +22,7 @@ For an environment that exposes a forwarded preview port:
 npm start -- --host 0.0.0.0 --port 3000
 ```
 
-Use the environment's preview for port 3000. The included server is for development; bind it to localhost. Public hosting serves only the static workshop files. No SPA rewrite is required because workshop navigation uses URL fragments.
+Use the environment's preview for port 3000. The included server is for development; bind it to localhost. Public hosting serves the guide plus a password-protected key retrieval endpoint. No SPA rewrite is required because workshop navigation uses URL fragments.
 
 ## Workflows
 
@@ -40,7 +40,7 @@ JC Economics follows learning outcomes and readings → student question map →
 
 The guide includes Gmail setup instructions, task objectives, expandable model prompts, resource downloads and a replayable walkthrough. It stores progress and walkthrough preferences in the current browser.
 
-Participants paste prompts and upload files into their own ChatGPT or Codex session. The guide does not connect to mailboxes, send emails or create schedules. The API steps provide a copyable prompt asking Codex to use the OpenAI Developers plugin’s openai-platform-api-key skill to create a new key for the participant’s own account. Participants choose the organisation/project and confirm the private save location. API usage is billed to their selected project. The guide does not create keys or make API calls.
+Participants paste prompts and upload files into their own ChatGPT or Codex session. The guide does not connect to mailboxes, send emails or create schedules. The API steps let participants enter the facilitator’s password, unlock the workshop key and copy it into a private environment file. A participant-owned key setup prompt remains available as an alternative. The guide does not create keys or call OpenAI itself.
 
 ## Edit and check
 
@@ -62,4 +62,4 @@ npm run build
 
 This validates JavaScript syntax and every resource referenced by the workshop data. After UI changes, check the walkthrough and normal navigation at desktop and mobile widths. If you change a resource in `public/packs/`, also update its matching archive in `public/downloads/`.
 
-The repository contains the frontend, resources and current Sites project binding. Credentials remain outside Git. Publishing copies only `public/` into `dist/`. The shared connection gateway and its controls have been removed; no credential handout is generated. See RESUME.md.
+The repository contains the frontend, resources and current Sites project binding. Credentials remain outside Git. Publishing builds a Worker from `public/` and `worker/key-access.js`, with D1 migrations for attempt limits. Credentials and the password verifier are Sites runtime secrets. See the API key access section in RESUME.md for configuration and fake-key local testing.

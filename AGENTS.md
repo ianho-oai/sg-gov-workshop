@@ -2,7 +2,7 @@
 
 Read `RESUME.md` for the current state and established interaction decisions.
 
-- Static workshop frontend: edit files directly in `public/`; no dependency installation is needed.
+- Frontend: edit `public/`. Password-gated key retrieval lives in `worker/key-access.js`; read the API access section in `RESUME.md` for runtime configuration and tests.
 - Start with `npm start`. Use `-- --host 0.0.0.0 --port 3000` when a forwarded preview needs it.
 - Run `npm run check` after changes. For UI changes, also check desktop/mobile navigation, copied prompts, downloads and the walkthrough.
 - Keep download ZIPs consistent with the corresponding files in `public/packs/`.

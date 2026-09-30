@@ -29,11 +29,39 @@ function toast(text){$('toast').textContent=text;$('toast').classList.add('visib
 function navigate(id,n){hideTip();const hash='#'+id+'/'+n;if(location.hash===hash)render();else location.hash=hash;}
 function move(delta){if(current.kind==='prompt')return;const order=[0,'assignment',...current.steps.slice(1).map(s=>s.number)];navigate(current.id,order[Math.max(0,Math.min(order.length-1,order.indexOf(step)+delta))]);}
 function resourceLink(file,subtitle){const type=file.split('.').pop().toLowerCase();return `<a class="file-card file-${escape(type)}" href="${escape(current.baseUrl+file)}" download><span class="file-badge">${({docx:'WORD',xlsx:'EXCEL',pdf:'PDF',png:'IMAGE',csv:'CSV'})[type]||'FILE'}</span><span class="file-meta"><strong>${escape(file)}</strong><small>Click to download <span aria-hidden="true">↓</span></small></span></a>`;}
-function workshopKeyPanel(exercise='Advanced API exercise'){
- return `<section class="workshop-key" aria-labelledby="workshop-key-title"><h2 id="workshop-key-title">Create your own API key</h2><p>For the ${escape(exercise)}, ask Codex to use the OpenAI Developers API-key skill. You’ll choose your account/project and confirm where the key is saved privately.</p><p>API usage is billed to your selected OpenAI Platform project.</p><details class="model-answer"><summary>View API setup prompt</summary><div class="model-answer-content"><div class="prompt-content" tabindex="0" aria-label="API setup prompt text">${escape(data.apiKeySetupPrompt)}</div></div></details><div class="message-actions"><button class="copy-btn" data-copy-api-setup>${copyIcon} Copy API setup prompt</button></div></section>`;
+let unlockedWorkshopKey=null, keyClearTimer=null;
+function clearWorkshopKey(){
+ unlockedWorkshopKey=null;clearTimeout(keyClearTimer);
+ const button=document.querySelector('[data-copy-workshop-key]');if(button)button.hidden=true;
 }
+function workshopKeyPanel(exercise='Advanced API exercise'){
+ return `<section class="workshop-key" aria-labelledby="workshop-key-title"><h2 id="workshop-key-title">Workshop API key</h2><p>For the ${escape(exercise)}, enter the password shared by your facilitator to unlock the key. No sign-in is needed.</p><form data-workshop-key-form class="key-access-form"><label for="workshop-password">Workshop password</label><div class="key-access-row"><input id="workshop-password" name="password" type="password" autocomplete="off" maxlength="128" required><button class="copy-btn" type="submit">Unlock API key</button></div><p data-key-status role="status" aria-live="polite"></p><button class="copy-btn" data-copy-workshop-key type="button" hidden>${copyIcon} Copy API key</button></form><p>After unlocking, you have one minute to copy. Save it in your project’s private environment file. Key retrieval closes when the workshop access window ends.</p><details class="model-answer"><summary>Using your own API key instead?</summary><div class="model-answer-content"><p>Create a key in your own account with the setup prompt below. Usage is billed to your selected project.</p><div class="prompt-content" tabindex="0" aria-label="API setup prompt text">${escape(data.apiKeySetupPrompt)}</div><button class="copy-btn" data-copy-api-setup>${copyIcon} Copy API setup prompt</button></div></details></section>`;
+}
+document.addEventListener('submit',async e=>{
+ const form=e.target.closest('[data-workshop-key-form]');if(!form)return;e.preventDefault();clearWorkshopKey();
+ const input=form.elements.password,button=form.querySelector('[type="submit"]'),status=form.querySelector('[data-key-status]');
+ button.disabled=true;status.textContent='Checking password…';
+ try{
+  const result=await fetch('/api/workshop-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:input.value}),cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(15000)});
+  const payload=await result.json();if(!form.isConnected)return;
+  if(!result.ok){status.textContent=payload.message||'Unable to unlock the key.';return;}
+  if(typeof payload.key!=='string'||!payload.key.startsWith('sk-'))throw new Error('Invalid response');
+  unlockedWorkshopKey=payload.key;form.querySelector('[data-copy-workshop-key]').hidden=false;
+  status.textContent='Key unlocked. Click Copy API key within one minute.';
+  keyClearTimer=setTimeout(()=>{clearWorkshopKey();if(form.isConnected)status.textContent='Unlocked key cleared. Enter the password again to copy.';},60000);
+ }catch{if(form.isConnected)status.textContent='Key retrieval is unavailable. Please try again or ask the facilitator.';}
+ finally{input.value='';button.disabled=false;}
+});
+document.addEventListener('click',async e=>{
+ const button=e.target.closest('[data-copy-workshop-key]');if(!button||!unlockedWorkshopKey)return;
+ const status=button.closest('form').querySelector('[data-key-status]');
+ try{await navigator.clipboard.writeText(unlockedWorkshopKey);clearWorkshopKey();status.textContent='API key copied. Paste it into your private environment file.';}
+ catch{status.textContent='Clipboard access was blocked. Allow clipboard access, then click Copy API key again.';}
+});
+window.addEventListener('pagehide',clearWorkshopKey);
 
 function render(){
+ clearWorkshopKey();
  const tabFocused=document.activeElement?.matches('[role="tab"]');
  const raw=location.hash.replace(/^#/,'').split('/');current=data.tracks.find(t=>t.id===raw[0])||data.tracks[0];step=raw[1]==='assignment'?'assignment':Math.max(0,Math.min(lastStep(current.id),parseInt(raw[1],10)||0));positions[current.id]=step;
  try{localStorage.setItem(storageKey,JSON.stringify(positions));}catch{}

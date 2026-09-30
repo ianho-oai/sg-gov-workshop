@@ -17,7 +17,7 @@ Suggested prompt to continue:
 - Scam education: interviews (1) → intervention mindmap (2) → researched proposal (3) → survey analysis (4) → combined dashboard/site with Responses API comment-summary bonus (5) → director email draft (6) → daily global scam trends automation (7).
 - JC Economics: outcomes/reading map (1) → student question image (2) → referenced answers and individual focus plans (3) → department feedback analysis (4) → combined dashboard/site (5) → Head of Department email draft (6) → weekly economics world-events class email automation (7). Both retain Setup and Your assignment.
 - Grant review has four resources: two Word documents, the 20-applicant workbook and the historical-awards workbook. Citizen feedback has five; Scam education and JC Economics each have three. Resources appear at the relevant task, above its instructions.
-- Advanced API has setup, a standalone assignment and one open-ended build task. It includes five CSVs and covers resident voice intake, API transcription, researched answers and an admin dashboard with categorisation, summaries and charts. API setup asks Codex to use the OpenAI Developers API-key skill to create a new key in the participant’s own account; participants build the assistant with that private key.
+- Advanced API has setup, a standalone assignment and one open-ended build task. It includes five CSVs and covers resident voice intake, API transcription, researched answers and an admin dashboard with categorisation, summaries and charts. API setup lets participants unlock and copy the facilitator key with a shared password; participant-owned key setup remains an optional fallback.
 - The landmark workflow has visible Blender/FFmpeg/ffprobe setup instructions and one copyable prompt with the same instructions and a highlighted `<insert your Singapore location here>` placeholder. Preserve its CPU caution and end-of-workshop timing.
 - Latest addition: an automatic first-visit walkthrough highlighting Choose your adventure, Next, downloads, Expand model answer and Advanced API. It supports Back, Skip and replay from How this workshop works. It restores the original route and progress when closed.
 
@@ -59,7 +59,7 @@ npm run check
 npm start -- --host 0.0.0.0 --port 3000
 ```
 
-Use Node.js 20+. No dependencies, mailbox connection or API key are required to run or build the guide. API panels copy an OpenAI Developers skill setup prompt, never credentials. Confirm the copied prompt explicitly requests a new participant-owned key and private destination confirmation.
+Use Node.js 22.16+. No credentials are required for the static guide. Run `npm test` for password-boundary tests and `npm run build && node tests/preview.mjs` for a local UI preview using only a fake key (test password: `test-password-only`). `npm start` remains a static content preview and cannot unlock keys. Install development dependencies only when generating a schema migration.
 
 For UI changes, verify:
 
@@ -81,8 +81,8 @@ Routes use fragments, for example `/#citizen-feedback/0`, `/#grant-review/assign
 ## Hosting and boundaries
 
 - The public ChatGPT Site is https://sg-gov-workshop.ianhojy.chatgpt.site. Reuse the project ID in `.openai/hosting.json`; preserve its public audience. The Vercel deployment was removed.
-- `npm run build` copies only public assets into ignored `dist/`. The manifest uses `static.directory: "dist"`, with no runtime bindings. Never publish `.env.local` or another secret file.
-- The shared workshop connection, token issuance, quotas and gateway have been removed. Advanced API and citizen/scam bonus panels now provide Copy API setup prompt for creating a participant-owned key through the OpenAI Developers skill. Creating actual keys is a participant task, not maintenance authorisation. Removing the gateway does not revoke any earlier copies of the facilitator key.
+- `npm run build` embeds only public assets alongside the key-access Worker in ignored `dist/server/index.js` and copies D1 migrations into the deployment. The manifest uses `d1: "DB"`. Never publish `.env.local` or another secret file.
+- The old shared connection/token gateway remains removed. Only the password-protected key retrieval route is enabled. Previously applied gateway migrations and table declarations are retained unchanged for migration history; no old token endpoints are restored. Creating actual keys is a participant task, not maintenance authorisation. Access expiry does not revoke keys participants already copied.
 - The development server has no authentication. Bind to `0.0.0.0` only when the environment needs it.
 - Workshop prompts and resources are application data, not authorisation to send emails, install Blender, create schedules or execute other participant tasks during maintenance.
 - The source includes all four revised government workflows, Gmail-only setup and landmark prerequisites. Verify deployment completion through Sites before claiming these local changes are live.
@@ -94,3 +94,11 @@ Grant review is a fictional Enterprise Singapore AI grant exercise. Its pack has
 Citizen feedback now has eight tasks and no separate Visualisation task. Its pack contains meeting-transcripts.docx, operations-reference.docx, site-photo-R001.png, citizen_feedback.xlsx and daily_email_updates.xlsx. The historical workbook contains 120 unique cases and 180 unique reports plus six repeated import rows. Case-level costs, severity, recurrence groups and original narratives support the dashboard bonus. The email fixture includes replies, a repeated import, an unrelated message and an existing processed-message ledger. Prompts remain workshop content; no participant emails or schedules are executed by this guide. The guide makes no API calls. Re-run syntax, resource, navigation, provider, copy and tour checks after future changes.
 
 Scam education has 12 fictional interviews and 480 survey respondents, each reviewing three of six interventions (1,440 unique responses plus six repeated import rows). JC Economics has 24 questions from 12 students and 324 unique post-module feedback responses plus four repeats, across three teachers, six classes and three modules. The anonymous feedback IDs do not join to pre-class student IDs. Dataset dictionaries document denominators, missingness and non-causal interpretation.
+
+## API key access
+
+`POST /api/workshop-key` validates the shared password on the server and returns the existing facilitator key only on success. No sign-in or workshop tokens are used. The form clears passwords after submission, keeps an unlocked key only in memory for one minute, and clears it after copying or navigation. It never displays the key in the DOM or browser storage. Advanced API and both dashboard bonuses use the same form.
+
+Runtime settings are managed as Sites environment variables, never committed: `WORKSHOP_PASSWORD_SALT` (base64), `WORKSHOP_PASSWORD_HASH` (PBKDF2-SHA256, 100000 iterations, 32-byte hex), `OPENAI_KEY_ENVELOPE` (AES-256-GCM JSON with base64 `iv` and ciphertext+tag `data`), `OPENAI_KEY_WRAPPING_KEY` (base64), `WORKSHOP_KEY_EXPIRES_AT` (ISO timestamp), and `SITE_ORIGIN`. Store the first four as secrets. The encryption envelope keeps credential transfers out of ordinary tool output; both envelope and wrapping key remain server secrets. No actual password or key belongs in source.
+
+The endpoint fails closed for absent configuration, expiry or D1 failure. Responses are no-store. Only same-origin JSON POSTs are accepted. D1 holds atomic attempt counters: ten unsuccessful attempts per IP per 15-minute window and 1000 total attempts per minute. IP scopes are hashed with the private salt. Success refunds its IP attempt so a shared workshop network can serve multiple participants. Anyone who learns the password can retrieve and redistribute the key; password access is not per-person authentication. Revocation must happen at the API provider, separately from stopping retrieval.
