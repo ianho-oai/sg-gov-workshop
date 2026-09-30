@@ -1025,7 +1025,8 @@ window.WORKSHOP_DATA = {
       "setupInstructions": [
         "Switch to Codex and use a workspace with computer-use/browser controls available.",
         "Paste the prompt and watch it operate Google Flights: fill the search, use filters and inspect results.",
-        "If browser access needs setup, follow Codex’s instructions. You do not need an API key for this activity."
+        "If browser access needs setup, follow Codex’s instructions. You do not need an API key for this activity.",
+        "Optional Appshots start: open Google Flights, bring that window forward, then press both Command keys (Mac) or both Alt keys (Windows). Check that the attachment lands in your Codex chat before sending the prompt."
       ],
       "followUpsTitle": "Change your mind while it works",
       "followUps": [
@@ -1039,7 +1040,45 @@ window.WORKSHOP_DATA = {
           "name": "Computer use prompt",
           "minutes": 5,
           "resources": [],
-          "prompt": "Use your computer-use/browser controls to operate Google Flights (https://www.google.com/travel/flights) and help me compare a short holiday from Singapore to Tokyo.\n\n- Search for one adult, return economy, from Singapore (SIN) to Tokyo (any airport). Depart on the first Friday of next month and return on the following Monday. State the exact dates and year before searching, using Singapore time.\n- Use the website interface: enter the route and dates, set the currency to SGD, apply a nonstop filter and inspect the flight results. Show the browser so I can follow the clicks and changes.\n- Find up to three useful options, aiming for a total return fare below S$900. Compare total fare, airline, airports, local departure/arrival times, duration and baggage information actually shown. Label details that need checking; do not invent unavailable fares or inclusions.\n- Try shifting the trip by one day using the date grid or calendar, and explain whether that improves the price. Keep the original-date options in the comparison.\n- Give me a short recommendation with the search link and a screenshot of the relevant results. Treat prices as a snapshot that may change.\n- Pause before any booking or payment. If computer use is unavailable or the site blocks access, explain the blocker and help me enable the required browser capability; do not pretend to have operated the page."
+          "prompt": "Use your computer-use/browser controls to operate Google Flights (https://www.google.com/travel/flights) and help me compare a short holiday from Singapore to Tokyo.\n\n- If I attached an Appshot of Google Flights, use it as starting context. Re-check the live browser before clicking or comparing fares; the attachment may be out of date.\n- Search for one adult, return economy, from Singapore (SIN) to Tokyo (any airport). Depart on the first Friday of next month and return on the following Monday. State the exact dates and year before searching, using Singapore time.\n- Use the website interface: enter the route and dates, set the currency to SGD, apply a nonstop filter and inspect the flight results. Show the browser so I can follow the clicks and changes.\n- Find up to three useful options, aiming for a total return fare below S$900. Compare total fare, airline, airports, local departure/arrival times, duration and baggage information actually shown. Label details that need checking; do not invent unavailable fares or inclusions.\n- Try shifting the trip by one day using the date grid or calendar, and explain whether that improves the price. Keep the original-date options in the comparison.\n- Give me a short recommendation with the search link and a screenshot of the relevant results. Treat prices as a snapshot that may change.\n- Pause before any booking or payment. If computer use is unavailable or the site blocks access, explain the blocker and help me enable the required browser capability; do not pretend to have operated the page."
+        }
+      ]
+    },
+    {
+      "id": "experience-appshots",
+      "name": "Appshots",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "Codex",
+      "description": "Show Codex an app window and turn what you are looking at into an explanation and useful next steps.",
+      "setupTitle": "Show it what you are looking at",
+      "setupNote": "A quick way to ask “help me with this”. Use a public page for this exercise; an Appshot can include available text beyond what is visible. If Appshots is unavailable, attach a screenshot instead.",
+      "setupInstructions": [
+        "In the desktop app, open a Codex chat. In Appshots settings, choose Current chat as the destination.",
+        "Open a public Singapore government service page in your browser, such as an HDB service page, and bring that window to the front.",
+        "Press both Command keys on Mac or both Alt keys on Windows, or your configured Appshots shortcut. Complete any permission setup, then check the captured attachment before sending.",
+        "Paste the prompt below in the chat containing the Appshot. After the answer, capture a different section and try a follow-up."
+      ],
+      "followUpsTitle": "Try showing a different view",
+      "followUps": [
+        "I have attached another section of the same service page. Update the checklist and point out what changed.",
+        "Rewrite that explanation for someone using this service for the first time. Keep it to five short bullets.",
+        "From this Appshot, identify three places where the page could explain the process more clearly, and suggest replacement wording."
+      ],
+      "takeaway": "Notice how sharing an app window gives your question context. Capture again when the view changes; an Appshot is a snapshot.",
+      "references": [
+        {
+          "label": "Appshots setup and shortcuts",
+          "url": "https://learn.chatgpt.com/docs/appshots"
+        }
+      ],
+      "steps": [
+        {
+          "number": 0,
+          "name": "Appshots prompt",
+          "minutes": 3,
+          "resources": [],
+          "prompt": "Use the Appshot I attached to help me understand this Singapore government service page and what a resident should do next.\n\n- Start by identifying the page or service from the attachment. If the attachment is missing or unreadable, ask me to attach it again rather than guessing.\n- Explain its purpose in plain English, then produce a short checklist of next steps. Extract any documents, dates or requirements actually provided, and label information that is not shown.\n- Separate what the attachment says from your interpretation. Do not infer my personal eligibility or invent missing instructions.\n- If current details are needed, use the page URL when available to check the official agency website, cite it and label those findings separately from the Appshot. If you cannot identify the source, ask me for the link.\n- Finish with the two most useful questions a resident should clarify before proceeding. Keep the answer concise. Do not submit a form or application.\n- If I attach another Appshot, use the new context to update your explanation and checklist."
         }
       ]
     },
@@ -1093,13 +1132,15 @@ window.WORKSHOP_DATA = {
       "setupInstructions": [
         "Open a new Codex chat with Sites available.",
         "Paste the prompt below to create a Singapore government services finder. No API key or uploaded files are needed.",
-        "Try the search and filters in the preview, then open the published link. Ask for a change and watch the same site update."
+        "Try the search and filters in the preview, then open the published link. Ask for a change and watch the same site update.",
+        "Try Appshots after building: bring your site preview forward, capture it with both Command keys (Mac) or both Alt keys (Windows), and attach it to the same Codex chat. Use the Appshots experience for setup help."
       ],
       "followUpsTitle": "Try changing the site",
       "followUps": [
         "Make this easier for older residents to use: larger text, clearer buttons and simpler descriptions.",
         "Add a “Moving home” category with verified official links, then republish the same site.",
-        "Add a print-friendly checklist for the services currently shown by my filters."
+        "Add a print-friendly checklist for the services currently shown by my filters.",
+        "Use the attached Appshot of my site to identify three things that could confuse a first-time resident. Fix those in this site, check the result, then republish it."
       ],
       "takeaway": "Notice how one prompt becomes a working, interactive site with researched content, and how a follow-up changes the published result.",
       "steps": [
