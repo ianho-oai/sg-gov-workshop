@@ -1080,6 +1080,37 @@ window.WORKSHOP_DATA = {
           "prompt": "Help me plan dinner through a live conversation. I’m near City Hall MRT in Singapore, looking for dinner tonight for two people at around S$40 per person. Use Singapore time and confirm the calendar date you mean by tonight.\n\n- Start by asking one short question about my preferred food or dietary needs. Keep your spoken replies brief and conversational so I can respond.\n- Search for three suitable nearby restaurants. Check current opening hours, location, menu prices and recent evidence for your recommendations. Explain the trade-offs and put useful source links in the chat.\n- Check the latest local weather forecast for this evening, including around 7 p.m. Explain the rain risk and forecast uncertainty, then suggest an indoor option and a sheltered route only if you can verify it.\n- I may interrupt or change the budget, dietary needs or location while you are talking. Follow my latest request, keep the other preferences and update your recommendation.\n- Ask me to choose between your best two options. End with a short written recap of the restaurant, estimated budget, address and weather plan. Do not make a reservation.\n- If live search or weather information is unavailable, say so clearly and tell me what needs checking instead of presenting guesses as current facts."
         }
       ]
+    },
+    {
+      "id": "experience-create-site",
+      "name": "Create a site",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "Codex",
+      "description": "Turn an idea into a published ChatGPT Site that helps residents find the right Singapore government service.",
+      "setupTitle": "Build and share a useful site",
+      "setupNote": "Copy this single prompt into Codex. It takes you from an idea to a working site with a link you can share.",
+      "setupInstructions": [
+        "Open a new Codex chat with Sites available.",
+        "Paste the prompt below to create a Singapore government services finder. No API key or uploaded files are needed.",
+        "Try the search and filters in the preview, then open the published link. Ask for a change and watch the same site update."
+      ],
+      "followUpsTitle": "Try changing the site",
+      "followUps": [
+        "Make this easier for older residents to use: larger text, clearer buttons and simpler descriptions.",
+        "Add a “Moving home” category with verified official links, then republish the same site.",
+        "Add a print-friendly checklist for the services currently shown by my filters."
+      ],
+      "takeaway": "Notice how one prompt becomes a working, interactive site with researched content, and how a follow-up changes the published result.",
+      "steps": [
+        {
+          "number": 0,
+          "name": "Create a ChatGPT Site prompt",
+          "minutes": 8,
+          "resources": [],
+          "prompt": "Create and publish a ChatGPT Site called “Find the right service” that helps residents navigate Singapore government services. Use Sites to build and host it, and give me the working published link.\n\n- Make the home page start with “What do you need help with?” and a prominent search box. Add clear categories for Housing, Family, Work, Transport and Money.\n- Research at least 12 useful services across those categories using official Singapore government and agency websites. Use plain-English situations such as moving home, looking for work or getting help with household expenses.\n- Each service card should explain what it helps with, the responsible agency, the next step and a verified link to the official service page. Include the source and date checked. Use real, current sources; do not invent schemes, eligibility rules or application links.\n- Make search and category filters work together, with a result count, a clear-filters button and a helpful no-results state. Let me expand a card to see a short “How to get started” checklist based on its official source.\n- Use a clean, welcoming design with readable text, strong contrast, keyboard-friendly controls and a layout that works well on phones. Keep the main search and categories easy to find.\n- Label it as a workshop-built service finder and link users to official websites for applications and definitive eligibility information. Do not collect NRIC numbers, financial details or other personal information, and do not imply this is an official government website.\n- Keep this simple: no sign-in or AI API is needed. Show me a preview, test the search, combined filters, reset, empty results and outgoing links, then publish it as a publicly accessible ChatGPT Site. Ask me only for genuinely required permissions or missing information.\n- Finish with the published URL and three example searches I can try. When I request changes later, update this same site and republish it."
+        }
+      ]
     }
   ],
   "apiKeySetupPrompt": "Use the OpenAI Developers plugin’s openai-platform-api-key skill to create a new OpenAI API key for my own OpenAI Platform account for this workshop exercise.\n- Open the secure Platform setup flow so I can choose the organisation/project, key name and expiry.\n- Confirm the local destination with me before saving the key as OPENAI_API_KEY in an ignored .env.local file or the appropriate private server secret setting for this project.\n- Keep the key on the server. Never display it in chat, browser code, logs or published files.\n- If the skill or OpenAI Platform connection is unavailable, help me enable/connect it and wait for me to finish; do not claim a key has been created.\n- Once setup is complete, check billing and the models needed for my exercise. Explain the expected API usage and obtain my approval before a small live test. Report only safe setup metadata and the test result."

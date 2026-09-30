@@ -10,7 +10,7 @@ Suggested prompt to continue:
 
 ## Current state
 
-- Eight sidebar entries: four government workflows grouped under **Choose your adventure**, **Advanced API**, **3D Singapore landmark**, and an **Experience** group with **Computer use** and **Live voice**. Experience entries each have one copyable prompt, brief launch instructions and suggested follow-ups; no assignment or workflow tabs.
+- Nine sidebar entries: four government workflows grouped under **Choose your adventure**, **Advanced API**, **3D Singapore landmark**, and an **Experience** group with **Computer use**, **Live voice** and **Create a site**. Experience entries each have one copyable prompt, brief launch instructions and suggested follow-ups; no assignment or workflow tabs.
 - Four standard tracks: citizen feedback, grant review, scam education and JC Economics.
 - Citizen feedback: Setup (0) → Your assignment → meeting summary (1) → annotated-image brainstorm (2) → costed proposal (3) → historical analysis and revised proposal (4) → filterable dashboard with optional Responses API sub-topic summary (5) → senior-director email (6) → daily email-summary automation (7) → project status site (8).
 - Grant review: Setup (0) → Your assignment → criteria transcript and proposed rubric (1) → official-source research and generated criteria visual (2) → evaluate 20 proposals and write recommendations (3) → analyse 300 historical awards (4) → combined comparison dashboard/visualisation (5) → five personalised acceptance emails (6) → grant-process and funnel site (7). There is no separate Visualisation or Automation step in this track.
@@ -66,7 +66,7 @@ For UI changes, verify:
 1. A fresh browser context shows the six-step tour; each spotlight and card fit at desktop and mobile widths.
 2. Finishing, skipping or pressing Escape restores the original track/step; reload does not repeat the tour.
 3. How this workshop works → Replay walkthrough starts it again.
-4. Choose your adventure expands/collapses; all eight sidebar entries open correctly.
+4. Choose your adventure expands/collapses; all nine sidebar entries open correctly.
 5. Setup → Your assignment → task navigation works with both tabs and arrows.
 6. Resource downloads succeed, model prompts expand and copy, and all email instructions use Gmail.
 7. Advanced API and landmark deep links work. The landmark placeholder is highlighted visually but copied as plain text.

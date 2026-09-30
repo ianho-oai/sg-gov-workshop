@@ -27,6 +27,7 @@ Use the environment's preview for port 3000. The included server is for developm
 ## Workflows
 
 - **Choose your adventure:** Citizen feedback, Grant review, Scam education and JC Economics.
+- **Experience:** Standalone prompts for Computer use, Live voice and creating a ChatGPT Site for Singapore government services.
 - **Advanced API:** Build a Meet-the-People Session voice intake, transcription and research tool, with FAQ retrieval, agency routing and an admin interaction dashboard.
 - **3D Singapore landmark:** Follow the Blender/FFmpeg setup instructions, then copy the creation prompt and insert your chosen location. Run this CPU-intensive workflow at the end.
 
