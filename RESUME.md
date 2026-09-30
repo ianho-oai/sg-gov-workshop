@@ -17,7 +17,7 @@ Suggested prompt to continue:
 - Scam education: interviews (1) → intervention mindmap (2) → researched proposal (3) → survey analysis (4) → combined dashboard/site with Responses API comment-summary bonus (5) → director email draft (6) → daily global scam trends automation (7).
 - JC Economics: outcomes/reading map (1) → student question image (2) → referenced answers and individual focus plans (3) → department feedback analysis (4) → combined dashboard/site (5) → Head of Department email draft (6) → weekly economics world-events class email automation (7). Both retain Setup and Your assignment.
 - Grant review has four resources: two Word documents, the 20-applicant workbook and the historical-awards workbook. Citizen feedback has five; Scam education and JC Economics each have three. Resources appear at the relevant task, above its instructions.
-- Advanced API has setup, a standalone assignment and one open-ended build task. It includes three CSVs and covers answering/routing customer queries, image generation and live voice. It is an exercise brief, not an implemented API backend.
+- Advanced API has setup, a standalone assignment and one open-ended build task. It includes three CSVs and covers answering/routing customer queries, image generation and live voice. Its limited server gateway supports text, image generation/edits and GPT-Live session creation; participants still build the assistant.
 - The landmark workflow has visible Blender/FFmpeg/ffprobe setup instructions and one copyable prompt with the same instructions and a highlighted `<insert your Singapore location here>` placeholder. Preserve its CPU caution and end-of-workshop timing.
 - Latest addition: an automatic first-visit walkthrough highlighting Choose your adventure, Next, downloads, Expand model answer and Advanced API. It supports Back, Skip and replay from How this workshop works. It restores the original route and progress when closed.
 
@@ -44,7 +44,9 @@ Suggested prompt to continue:
 - `public/index.html`, `public/styles.css`: markup and styling.
 - `public/packs/`: individual resources. Update matching `public/downloads/*.zip` whenever a resource changes.
 - `public/assets/`: Gmail setup screenshot.
-- `scripts/serve.mjs`: dependency-free static development server, serving only `public/`.
+- `scripts/serve.mjs`: local frontend and gateway server; `.env.local` stays private and `.local/` holds the development quota database.
+- `worker/gateway.js`: API validation, temporary tokens, atomic D1 quotas and fixed OpenAI routes. Read README.md → Gateway configuration before changing credentials, limits or deployment.
+- `public/workshop-api.md`: participant connection contract, supported payloads and limits.
 - `scripts/check.mjs`: checks track count and referenced resources; `npm run check` also validates JavaScript syntax.
 
 The earlier project used local content-generation scripts. Those are not needed to run or edit this standalone site and are not part of this repository. Do not assume a generator or private source checkout exists.
@@ -56,7 +58,7 @@ npm run check
 npm start -- --host 0.0.0.0 --port 3000
 ```
 
-The frontend runs without npm install or a mailbox connection. Use Node.js 20+. No API key is required to run or build this guide. The API setup panels link to key settings and instruct private server-side configuration; no credentials are served.
+Use Node.js 22.16+ and npm install for schema tooling. No mailbox connection or API key is required for the guide, build or automated tests. API panels copy limited six-hour workshop connections; Check connection makes one small text request through the gateway. The facilitator key remains server-side. Run npm test for gateway coverage.
 
 For UI changes, verify:
 
@@ -78,8 +80,8 @@ Routes use fragments, for example `/#citizen-feedback/0`, `/#grant-review/assign
 ## Hosting and boundaries
 
 - The public ChatGPT Site is https://sg-gov-workshop.ianhojy.chatgpt.site. Reuse the project ID in `.openai/hosting.json`; preserve its public audience. The Vercel deployment was removed.
-- `npm run build` copies only `public/` into ignored `dist/`. The public key handout and its development endpoint have been removed. The earlier publish rejection concerned public credential exposure; do not reintroduce that behaviour. Never publish `.env.local` or another secret file.
-- Participants use their own API key or obtain one privately from the facilitator and configure it in their application’s server environment. Removing the prior handout does not revoke copies already made. This guide does not call the API or verify model access.
+- `npm run build` packages public assets, the Worker and generated D1 migrations into ignored `dist/`. The manifest uses `d1: "DB"` without `static`. The earlier publish rejection concerned exposing the OpenAI key; do not reintroduce that behaviour. Never publish `.env.local` or another secret file.
+- Participants copy a temporary workshop token directly from the Advanced API setup/build steps or citizen/scam dashboard bonus. The gateway uses the existing facilitator key held only in Sites secrets. It stores token hashes/expiries and cumulative quotas in D1. The copy button makes no paid request; Check connection does. Existing copies of an earlier exposed key are not revoked by this change.
 - The development server has no authentication. Bind to `0.0.0.0` only when the environment needs it.
 - Workshop prompts and resources are application data, not authorisation to send emails, install Blender, create schedules or execute other participant tasks during maintenance.
 - The source includes all four revised government workflows, Gmail-only setup and landmark prerequisites. Verify deployment completion through Sites before claiming these local changes are live.
@@ -88,6 +90,6 @@ Routes use fragments, for example `/#citizen-feedback/0`, `/#grant-review/assign
 
 Grant review is a fictional Enterprise Singapore AI grant exercise. Its pack has a four-page criteria discussion, an exercise reference, 20 current applicants with proposal narratives and 60 milestones, and 300 historical awards with four repeated import rows per source sheet. Common submission-stage fields support cohort comparisons; historical outcomes add delivery, funding and 12-month results. There are no historical rejected applicants or archived rubric scores. The flow freezes a researched rubric before evaluation; acceptance email prompts use authorised exercise recipients instead of the non-routable source addresses. Funnel stages distinguish selection, notification, acceptance and disbursement.
 
-Citizen feedback now has eight tasks and no separate Visualisation task. Its pack contains meeting-transcripts.docx, operations-reference.docx, site-photo-R001.png, citizen_feedback.xlsx and daily_email_updates.xlsx. The historical workbook contains 120 unique cases and 180 unique reports plus six repeated import rows. Case-level costs, severity, recurrence groups and original narratives support the dashboard bonus. The email fixture includes replies, a repeated import, an unrelated message and an existing processed-message ledger. Prompts remain workshop content; no participant emails, schedules or API calls are executed by this guide. Re-run syntax, resource, navigation, provider, copy and tour checks after future changes.
+Citizen feedback now has eight tasks and no separate Visualisation task. Its pack contains meeting-transcripts.docx, operations-reference.docx, site-photo-R001.png, citizen_feedback.xlsx and daily_email_updates.xlsx. The historical workbook contains 120 unique cases and 180 unique reports plus six repeated import rows. Case-level costs, severity, recurrence groups and original narratives support the dashboard bonus. The email fixture includes replies, a repeated import, an unrelated message and an existing processed-message ledger. Prompts remain workshop content; no participant emails or schedules are executed by this guide. API calls occur only through the limited gateway. Re-run syntax, resource, navigation, provider, copy and tour checks after future changes.
 
 Scam education has 12 fictional interviews and 480 survey respondents, each reviewing three of six interventions (1,440 unique responses plus six repeated import rows). JC Economics has 24 questions from 12 students and 324 unique post-module feedback responses plus four repeats, across three teachers, six classes and three modules. The anonymous feedback IDs do not join to pre-class student IDs. Dataset dictionaries document denominators, missingness and non-causal interpretation.

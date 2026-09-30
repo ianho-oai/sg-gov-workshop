@@ -6,11 +6,12 @@ A self-contained workshop guide with downloadable resources, copyable prompts an
 
 ## Run locally or in Codex
 
-Requires **Node.js 20 or later**. There are no npm dependencies to install. The guide runs directly from `public/` and needs no credentials.
+Requires **Node.js 22.16 or later**. Run `npm install` for schema tooling. The guide works without credentials; API connections require the facilitator’s server key.
 
 ```sh
 git clone https://github.com/ianho-oai/sg-gov-workshop.git
 cd sg-gov-workshop
+npm install
 npm start
 ```
 
@@ -22,7 +23,7 @@ For an environment that exposes a forwarded preview port:
 npm start -- --host 0.0.0.0 --port 3000
 ```
 
-Use the environment's preview for port 3000. The included server is for development; it has no authentication. For hosting, serve `public/` with any static hosting service. No SPA rewrite is required because workshop navigation uses URL fragments.
+Use the environment's preview for port 3000. The included server is for development; bind it to localhost. Public hosting uses the Sites Worker and its D1 database. No SPA rewrite is required because workshop navigation uses URL fragments.
 
 ## Workflows
 
@@ -40,7 +41,7 @@ JC Economics follows learning outcomes and readings → student question map →
 
 The guide includes Gmail setup instructions, task objectives, expandable model prompts, resource downloads and a replayable walkthrough. It stores progress and walkthrough preferences in the current browser.
 
-This frontend is a guide: participants paste prompts and upload files into their own ChatGPT or Codex session. It does not connect to mailboxes, send messages, schedule tasks or call OpenAI APIs itself. Availability of plugins, models, live voice and scheduling depends on the participant's account; setup screenshots may differ from their interface. API exercises use participants’ own keys or credentials supplied privately by the facilitator, stored in their application’s server environment. This guide neither serves nor publishes credentials.
+Participants paste prompts and upload files into their own ChatGPT or Codex session. The guide does not connect to mailboxes, send emails or create schedules. Its API gateway uses the facilitator’s server-side key for text, image and GPT-Live exercises. The public copy buttons issue limited six-hour workshop tokens; they never return the OpenAI key. Check connection makes one small paid text request. See [the connection contract](public/workshop-api.md) for endpoints and cumulative limits.
 
 ## Edit and check
 
@@ -57,8 +58,20 @@ This frontend is a guide: participants paste prompts and upload files into their
 
 ```sh
 npm run check
+npm test
+npm run build
 ```
 
 This validates JavaScript syntax and every resource referenced by the workshop data. After UI changes, check the walkthrough and normal navigation at desktop and mobile widths. If you change a resource in `public/packs/`, also update its matching archive in `public/downloads/`.
 
-The repository contains the frontend, resources and current Sites project binding. Credentials remain outside Git. Publishing copies only `public/` assets into `dist/`; no key handout is generated. See RESUME.md.
+The repository contains the frontend, resources and current Sites project binding. Credentials remain outside Git. Publishing builds a Worker with embedded public assets and generated D1 migrations into `dist/`; no OpenAI key handout is generated. See RESUME.md.
+
+## Gateway configuration
+
+For local API testing, put the facilitator-authorised `OPENAI_API_KEY` in ignored `.env.local`. The development database lives in ignored `.local/workshop.sqlite`. Tests use isolated SQLite databases and fake upstream responses. No key is needed for tests or builds.
+
+Production uses `.openai/hosting.json` with the logical `d1: "DB"` binding and no static configuration. The selected credential is stored only in Sites runtime secrets as `OPENAI_KEY_ENVELOPE` and `OPENAI_KEY_WRAPPING_KEY`; the Worker decrypts it server-side. A direct secret `OPENAI_API_KEY` is also supported. Never put either form in source, build output, prompts or logs.
+
+D1 holds token hashes, expiries and atomic quota counters, never prompts or generated content. `db/schema.ts` owns the schema; run `npx drizzle-kit generate` after schema changes and commit generated `drizzle/` migrations. Applied migrations are immutable. `npm run build` includes them in the deployment artifact.
+
+Set runtime `WORKSHOP_ENABLED=false` and redeploy to stop all new requests. To begin another explicitly authorised workshop allowance, change `WORKSHOP_EVENT_ID` and redeploy; this invalidates prior tokens and starts new cumulative quotas. Caps are defined centrally in `worker/gateway.js` and documented in the participant contract. Failed upstream requests consume allowance. Copying another token cannot reset the shared cap. Live is limited by number of sessions, not server-enforced minutes; exercise applications must offer End and a two-minute stop timer.

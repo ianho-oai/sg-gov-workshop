@@ -1,16 +1,28 @@
+import {handleApi} from '../worker/gateway.js';
+import {localDatabase} from './local-db.mjs';
+import {mkdirSync,readFileSync} from 'node:fs';
+import {parseEnv} from 'node:util';
+import {Readable} from 'node:stream';
 import {createServer} from 'node:http';
 import {readFile, stat} from 'node:fs/promises';
 import {resolve, extname, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
+mkdirSync(new URL('../.local/',import.meta.url),{recursive:true});
+const env={...process.env,DB:localDatabase(fileURLToPath(new URL('../.local/workshop.sqlite',import.meta.url)))};
+try{Object.assign(env,parseEnv(readFileSync(new URL('../.env.local',import.meta.url),'utf8')));}catch(error){if(error.code!=='ENOENT')throw error;}
 const root=fileURLToPath(new URL('../public/',import.meta.url));
 const args=process.argv.slice(2);
 const option=(name,fallback)=>{const i=args.indexOf(name);return i<0?fallback:args[i+1];};
 const host=option('--host',process.env.HOST||'127.0.0.1');
 const port=Number(option('--port',process.env.PORT||3000));
 if(!host||!Number.isInteger(port)||port<1||port>65535)throw new Error('Use --host HOST --port PORT (1–65535).');
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.pdf':'application/pdf','.csv':'text/csv; charset=utf-8','.zip':'application/zip','.docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document','.xlsx':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'};
+const types={'.md':'text/markdown; charset=utf-8','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.pdf':'application/pdf','.csv':'text/csv; charset=utf-8','.zip':'application/zip','.docx':'application/vnd.openxmlformats-officedocument.wordprocessingml.document','.xlsx':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'};
 const server=createServer(async(req,res)=>{
+ if(req.url.startsWith('/api/workshop/')){
+  try{const request=new Request(`http://${req.headers.host}${req.url}`,{method:req.method,headers:req.headers,...(['GET','HEAD'].includes(req.method)?{}:{body:Readable.toWeb(req),duplex:'half'})});
+  const response=await handleApi(request,env);res.writeHead(response.status,Object.fromEntries(response.headers));res.end(Buffer.from(await response.arrayBuffer()));}catch{res.writeHead(500);res.end('Service unavailable');}return;
+ }
  if(!['GET','HEAD'].includes(req.method)){res.writeHead(405,{'Allow':'GET, HEAD'});res.end();return;}
  try{
   let path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);

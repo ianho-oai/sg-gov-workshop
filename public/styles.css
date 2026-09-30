@@ -75,3 +75,5 @@ body{font-size:16px}.sidebar{width:280px}:root{--sidebar-width:280px}.brand{font
 @media(max-width:620px){#tour-card{padding:18px}#tour-card h2{font-size:21px}#tour-card p{font-size:15px;line-height:1.6}}
 
 .landmark-setup{margin-bottom:28px}.landmark-setup li{margin-bottom:12px}
+
+.connection-actions{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}.connection-actions button:disabled{opacity:.6;cursor:wait}.workshop-key a{color:#9bd2c4}.workshop-key .manual-copy{width:100%;min-height:180px;box-sizing:border-box;margin-top:14px}
