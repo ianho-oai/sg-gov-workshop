@@ -69,14 +69,15 @@ window.WORKSHOP_DATA = {
           "resources": [],
           "checkpoint": "Gmail is connected to the account you will use.",
           "checklist": [
-            "In ChatGPT, open Plugins and check whether Gmail is already connected to the account you will use.",
+            "First, use the toggle in the top-left of ChatGPT to switch to Codex.",
+            "In Codex, open Plugins and check whether Gmail is already connected to the account you will use.",
             "If Gmail is already connected, you are ready. Continue to step 1."
           ],
           "connectionSteps": [
             "Search for Gmail in Plugins.",
             "Select Gmail — Read and manage Gmail, as shown below.",
             "Choose Connect or follow the setup option shown. Sign in to the Google account approved for this session and review the requested permissions.",
-            "Return to ChatGPT and check that Gmail is connected. Continue to step 1."
+            "Return to Codex and check that Gmail is connected. Continue to step 1."
           ]
         },
         {
@@ -307,14 +308,15 @@ window.WORKSHOP_DATA = {
           "resources": [],
           "checkpoint": "Gmail is connected to the account you will use.",
           "checklist": [
-            "In ChatGPT, open Plugins and check whether Gmail is already connected to the account you will use.",
+            "First, use the toggle in the top-left of ChatGPT to switch to Codex.",
+            "In Codex, open Plugins and check whether Gmail is already connected to the account you will use.",
             "If Gmail is already connected, you are ready. Continue to step 1."
           ],
           "connectionSteps": [
             "Search for Gmail in Plugins.",
             "Select Gmail — Read and manage Gmail, as shown below.",
             "Choose Connect or follow the setup option shown. Sign in to the Google account approved for this session and review the requested permissions.",
-            "Return to ChatGPT and check that Gmail is connected. Continue to step 1."
+            "Return to Codex and check that Gmail is connected. Continue to step 1."
           ]
         },
         {
@@ -514,14 +516,15 @@ window.WORKSHOP_DATA = {
           "resources": [],
           "checkpoint": "Gmail is connected to the account you will use.",
           "checklist": [
-            "In ChatGPT, open Plugins and check whether Gmail is already connected to the account you will use.",
+            "First, use the toggle in the top-left of ChatGPT to switch to Codex.",
+            "In Codex, open Plugins and check whether Gmail is already connected to the account you will use.",
             "If Gmail is already connected, you are ready. Continue to step 1."
           ],
           "connectionSteps": [
             "Search for Gmail in Plugins.",
             "Select Gmail — Read and manage Gmail, as shown below.",
             "Choose Connect or follow the setup option shown. Sign in to the Google account approved for this session and review the requested permissions.",
-            "Return to ChatGPT and check that Gmail is connected. Continue to step 1."
+            "Return to Codex and check that Gmail is connected. Continue to step 1."
           ]
         },
         {
@@ -716,14 +719,15 @@ window.WORKSHOP_DATA = {
           "resources": [],
           "checkpoint": "Gmail is connected to the account you will use.",
           "checklist": [
-            "In ChatGPT, open Plugins and check whether Gmail is already connected to the account you will use.",
+            "First, use the toggle in the top-left of ChatGPT to switch to Codex.",
+            "In Codex, open Plugins and check whether Gmail is already connected to the account you will use.",
             "If Gmail is already connected, you are ready. Continue to step 1."
           ],
           "connectionSteps": [
             "Search for Gmail in Plugins.",
             "Select Gmail — Read and manage Gmail, as shown below.",
             "Choose Connect or follow the setup option shown. Sign in to the Google account approved for this session and review the requested permissions.",
-            "Return to ChatGPT and check that Gmail is connected. Continue to step 1."
+            "Return to Codex and check that Gmail is connected. Continue to step 1."
           ]
         },
         {
@@ -907,6 +911,7 @@ window.WORKSHOP_DATA = {
             {
               "title": "Before you begin",
               "items": [
+                "First, use the toggle in the top-left of ChatGPT to switch to Codex.",
                 "Open a Codex workspace that can run an application. Complete API setup before the exercise.",
                 "Create your own project API key, or obtain an exercise key privately from the facilitator.",
                 "Save the key as OPENAI_API_KEY in your application’s local .env file or server secret settings. Do not paste it into the Codex conversation.",
@@ -990,6 +995,7 @@ window.WORKSHOP_DATA = {
         }
       ],
       "setupInstructions": [
+        "First, use the toggle in the top-left of ChatGPT to switch to Codex.",
         "Open a local Codex workspace with permission to download applications and run commands. Replace the location placeholder before copying the prompt.",
         "Ask Codex to check for Blender first, then download the current stable Blender build for your operating system and CPU from blender.org if it is missing. Blender includes the Python runtime needed for scene scripts.",
         "Ask Codex to check for FFmpeg and ffprobe, then install them from ffmpeg.org or a trusted operating-system package manager if needed to encode and verify the films.",

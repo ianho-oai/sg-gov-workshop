@@ -30,7 +30,7 @@ Suggested prompt to continue:
 - Task briefs explain the situation, objective and expected output. Keep prompt instructions mostly in bullets.
 - Resources appear above the task with clear **Click to download** labels and colour-coded file types. Do not add a resource sidebar or redundant all-files controls.
 - Gmail is the sole email provider. The provider toggle, Outlook setup and its asset were removed; saved legacy provider preferences have no effect.
-- Setup has connection checks, not a copy-prompt button. Overall persona and assignment have their own tab after setup.
+- Setup first tells participants to switch to Codex using the top-left toggle, then checks the Gmail connection. It has no copy-prompt button. Overall persona and assignment have their own tab after setup.
 - Tabs and left/right arrows both navigate tasks. Do not bring back a step dropdown or Open ChatGPT shortcut.
 - Sidebar feature names show explanations on hover, focus or tap.
 - Brainstorm steps explicitly use image generation; image-reading inputs also appear in the workflows.
