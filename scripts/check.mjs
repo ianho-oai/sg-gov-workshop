@@ -9,7 +9,7 @@ runInNewContext(await readFile(resolve(root,'data.js'),'utf8'),context);
 const files=new Set(['index.html','app.js','styles.css','data.js','assets/gmail-setup.png']);
 const tracks=context.window.WORKSHOP_DATA.tracks;
 assert.equal(tracks.filter(t=>t.group!=='experience').length,6,'Expected six workshop tracks');
-assert.equal(tracks.filter(t=>t.group==='experience').length,4,'Expected four standalone experiences');
+assert.equal(tracks.filter(t=>t.group==='experience').length,9,'Expected nine standalone experiences');
 for(const track of tracks){
  assert(track.steps.every((step,index)=>step.number===index),`${track.id}: step numbers must match their navigation positions`);
  if(track.stepLabels)assert.equal(track.stepLabels.length,track.steps.length,`${track.id}: every step needs a tab label`);

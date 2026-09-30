@@ -1152,6 +1152,208 @@ window.WORKSHOP_DATA = {
           "prompt": "Create and publish a ChatGPT Site called “Find the right service” that helps residents navigate Singapore government services. Use Sites to build and host it, and give me the working published link.\n\n- Make the home page start with “What do you need help with?” and a prominent search box. Add clear categories for Housing, Family, Work, Transport and Money.\n- Research at least 12 useful services across those categories using official Singapore government and agency websites. Use plain-English situations such as moving home, looking for work or getting help with household expenses.\n- Each service card should explain what it helps with, the responsible agency, the next step and a verified link to the official service page. Include the source and date checked. Use real, current sources; do not invent schemes, eligibility rules or application links.\n- Make search and category filters work together, with a result count, a clear-filters button and a helpful no-results state. Let me expand a card to see a short “How to get started” checklist based on its official source.\n- Use a clean, welcoming design with readable text, strong contrast, keyboard-friendly controls and a layout that works well on phones. Keep the main search and categories easy to find.\n- Label it as a workshop-built service finder and link users to official websites for applications and definitive eligibility information. Do not collect NRIC numbers, financial details or other personal information, and do not imply this is an official government website.\n- Keep this simple: no sign-in or AI API is needed. Show me a preview, test the search, combined filters, reset, empty results and outgoing links, then publish it as a publicly accessible ChatGPT Site. Ask me only for genuinely required permissions or missing information.\n- Finish with the published URL and three example searches I can try. When I request changes later, update this same site and republish it."
         }
       ]
+    },
+    {
+      "id": "experience-image-generation",
+      "name": "Image generation",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "ChatGPT",
+      "description": "Create an anti-scam poster, then change the image with precise editing instructions.",
+      "setupTitle": "Try image generation",
+      "setupNote": "Keep the prompt and follow-ups in the same conversation.",
+      "setupInstructions": [
+        "Open a ChatGPT chat with image generation available and paste the prompt below.",
+        "Inspect the actual generated image, including every word. Then try one of the edits below in the same chat.",
+        "When editing, specify what to change and what to preserve. You can also attach an existing image as a starting point."
+      ],
+      "followUpsTitle": "Try a follow-up",
+      "followUps": [
+        "Edit this image for young working adults: replace the resident with a young commuter and use an MRT setting. Keep the headline, advice and colour palette unchanged.",
+        "Keep the current illustration and wording, but enlarge the three advice lines and simplify the background.",
+        "Create a landscape version for a presentation slide, preserving the character, colours and exact wording."
+      ],
+      "takeaway": "Notice how specific follow-up instructions revise an existing image while preserving the parts you want to keep.",
+      "references": [
+        {
+          "label": "Image generation guide",
+          "url": "https://learn.chatgpt.com/docs/image-generation"
+        }
+      ],
+      "steps": [
+        {
+          "number": 0,
+          "name": "Image generation prompt",
+          "minutes": 5,
+          "resources": [],
+          "prompt": "Generate an actual portrait poster image for a Singapore community anti-scam awareness booth aimed at older residents.\n\n- Use an original, friendly illustration of a resident pausing before responding to a suspicious phone message, with a recognisable HDB neighbourhood in the background.\n- Give the poster large, high-contrast type, generous spacing and a simple three-part visual sequence.\n- Use only this exact text: “PAUSE BEFORE YOU PAY”, “Check the sender”, “Never share your OTP”, and “Ask someone you trust”.\n- Use warm teal, cream and orange. Make the main headline readable at a glance, with each short instruction beside a clear illustration.\n- Do not add agency logos, QR codes, contact numbers or extra text. Show me the generated image."
+        }
+      ]
+    },
+    {
+      "id": "experience-image-reading",
+      "name": "Image reading",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "ChatGPT",
+      "description": "Inspect an estate photo and turn visual observations into an actionable site-visit checklist.",
+      "setupTitle": "Try image reading",
+      "setupNote": "Keep the prompt and follow-ups in the same conversation.",
+      "setupInstructions": [
+        "Download the sample estate photo below and attach it to a new ChatGPT chat.",
+        "Paste the prompt. Compare each observation with the image and challenge anything that seems uncertain.",
+        "Optional: try a photo of your own whiteboard or a public sign. An Appshot also works for content in an open app."
+      ],
+      "followUpsTitle": "Try a follow-up",
+      "followUps": [
+        "Focus on the lower-left part of the photo. Which of your observations are supported there, and which need a closer image?",
+        "Choose one improvement and give me a five-item site-visit checklist to test whether it is needed.",
+        "I have attached a whiteboard photo instead. Transcribe the legible notes, group the ideas and extract actions. Mark unreadable text and missing owners explicitly."
+      ],
+      "takeaway": "Notice the difference between what the image shows and what still needs checking.",
+      "references": [
+        {
+          "label": "Image reading guide",
+          "url": "https://learn.chatgpt.com/docs/image-inputs"
+        }
+      ],
+      "steps": [
+        {
+          "number": 0,
+          "name": "Image reading prompt",
+          "minutes": 5,
+          "resources": [
+            {
+              "file": "site-photo-R001.png"
+            }
+          ],
+          "prompt": "Inspect the attached estate photo as preparation for a Singapore neighbourhood improvement discussion.\n\n- List up to five observations about the physical environment, with the location of each in the image so I can check your interpretation.\n- Separate directly visible facts from possible issues that need a site visit. Do not infer measurements, hidden conditions, accessibility compliance or what residents think from the photo alone.\n- Suggest three practical improvements and explain which visible observation each addresses.\n- Turn this into a table: observation, location in image, possible impact, proposed improvement, what to verify on site.\n- Finish with three questions to ask residents. If details or text are unclear, say so; do not invent them."
+        }
+      ],
+      "baseUrl": "packs/citizen-feedback/",
+      "files": [
+        "site-photo-R001.png"
+      ]
+    },
+    {
+      "id": "experience-subagents",
+      "name": "Subagents",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "Codex",
+      "description": "Watch three agents research different countries in parallel, then combine their findings for Singapore.",
+      "setupTitle": "Try subagents",
+      "setupNote": "Keep the prompt and follow-ups in the same conversation.",
+      "setupInstructions": [
+        "Open a Codex chat with web research available and paste the prompt. It explicitly asks for three subagents.",
+        "Open the subagent activity in the chat to inspect the separate research tasks as they work.",
+        "Read the combined recommendation and follow its source links. If subagents are unavailable in your workspace, ask the facilitator; a sequential answer does not demonstrate this feature."
+      ],
+      "followUpsTitle": "Try a follow-up",
+      "followUps": [
+        "Ask the Australia subagent to check the strongest evidence for its recommended intervention, then update the combined brief.",
+        "Compare the two proposed Singapore pilots by delivery effort and what we could measure within six weeks."
+      ],
+      "takeaway": "Independent research can run in parallel; the main agent still needs to compare the evidence and produce a coherent recommendation.",
+      "references": [
+        {
+          "label": "Subagents guide",
+          "url": "https://learn.chatgpt.com/docs/agent-configuration/subagents"
+        }
+      ],
+      "steps": [
+        {
+          "number": 0,
+          "name": "Subagents prompt",
+          "minutes": 8,
+          "resources": [],
+          "prompt": "Use three actual subagents in parallel to research approaches to reducing scams, then give me one recommendation brief for a Singapore public-service team.\n\n- Delegate Australia to one subagent, the United Kingdom to a second, and Japan to a third. Each agent should work independently on its own country.\n- Each agent should find two concrete interventions using official government, regulator or public-agency sources. Cover the intervention, target audience, delivery approach, evidence of outcomes if available, limitations, source URLs and dates. Distinguish a reported outcome from an evaluation proving effectiveness.\n- Ask each agent to return a compact evidence table and one idea Singapore could test. Keep the research bounded to those two interventions per country.\n- Wait for all three, then reconcile their findings into a comparison table and recommend two small pilots for Singapore, with likely implementation effort, dependencies and measurable pilot outcomes. Explain where local validation is needed.\n- Cite the underlying sources, flag gaps or disagreements and tell me which work each subagent completed. If subagents cannot be started, say so rather than simulating separate agents in your answer."
+        }
+      ]
+    },
+    {
+      "id": "experience-create-skill",
+      "name": "Create and use a skill",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "Codex",
+      "description": "Save a reusable director-briefing skill, then invoke it on a fresh set of project notes.",
+      "setupTitle": "Create once, use it again",
+      "setupNote": "Keep the prompt and follow-ups in the same conversation.",
+      "setupInstructions": [
+        "Open a Codex chat in a workshop folder where it can save a local skill.",
+        "Copy Step 1 and let Codex finish creating the skill. Review its instructions and confirm it is discoverable.",
+        "Then copy Step 2 into the same chat. It names the skill explicitly and supplies a new example.",
+        "If the skill does not appear yet, follow Codex’s refresh instructions or restart the app and resume this chat before Step 2."
+      ],
+      "followUpsTitle": "Try a follow-up",
+      "followUps": [
+        "Update sg-director-brief to include a short Risks section, then rerun it on the same notes.",
+        "Use sg-director-brief on a different project and check that it keeps the same structure without carrying over facts from the earlier example."
+      ],
+      "takeaway": "The saved skill holds reusable instructions; the second prompt supplies only the new task and its inputs.",
+      "references": [
+        {
+          "label": "Create and use a skill guide",
+          "url": "https://developers.openai.com/codex/skills"
+        }
+      ],
+      "steps": [
+        {
+          "number": 0,
+          "name": "Step 1 · Create the skill",
+          "minutes": 5,
+          "resources": [],
+          "prompt": "Use the built-in skill-creator to create an instruction-only skill named sg-director-brief. Save it as a discoverable local skill for this workshop folder and show me the saved SKILL.md.\n\n- Purpose: turn rough public-service project notes into a concise director briefing. Trigger when I ask to use sg-director-brief or explicitly request this briefing format; do not apply it to unrelated writing.\n- Required format: one-line recommendation, Situation, Evidence, Options, Recommendation, Decisions needed, and Next steps (action / owner / due date). Keep the briefing under 350 words.\n- Preserve numbers and dates from the input. Distinguish confirmed facts, proposals and assumptions. Write “Not provided” for a missing owner, date or budget; never invent one.\n- Use plain English and include source references only when the input provides them. Do not browse, send emails or publish anything as part of this skill.\n- Add a brief self-check for the required headings, word limit and unsupported claims. Use no scripts or external dependencies.\n- Validate the skill, confirm its name and explain how I can invoke it. Stop after creation; I will send new notes for the first use.",
+          "instruction": "Copy this first. Wait until the skill has been saved and validated before moving to Step 2."
+        },
+        {
+          "number": 1,
+          "name": "Step 2 · Use your skill",
+          "minutes": 3,
+          "resources": [],
+          "instruction": "Continue in the same Codex chat after Step 1 finishes. The notes below are a fresh fictional project example.",
+          "prompt": "Use the saved sg-director-brief skill on these new project notes. Load its instructions first, then produce the briefing and briefly report whether it passed the skill’s self-check. If the skill is not available, help me make the saved skill discoverable before proceeding.\n\nFictional project notes:\n- A six-week digital-help booth pilot is proposed for two community clubs.\n- In an exercise survey of 80 residents, 46 said online forms were confusing, 22 wanted evening help and 12 preferred telephone support. Treat these as findings from this sample, not population estimates.\n- Option A: weekly staffed booths at both clubs, estimated total cost S$6,000.\n- Option B: a shared telephone clinic, estimated total cost S$3,500.\n- The team proposes Option A because residents can bring devices and practise with a facilitator. No option has been approved.\n- Mei will check venue availability by 16 October 2026. Arjun will draft the volunteer rota by 20 October 2026.\n- The budget ceiling, pilot start date and owner for evaluating the pilot have not been provided.\n- The director needs to select an option and confirm the funding ceiling.\n\nKeep this as a draft in our chat; do not send or publish it."
+        }
+      ]
+    },
+    {
+      "id": "experience-goal-mode",
+      "name": "Goal mode",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "Codex",
+      "description": "Give Codex a clear outcome and completion checks, then watch it work through a complete briefing pack.",
+      "setupTitle": "Try goal mode",
+      "setupNote": "Keep the prompt and follow-ups in the same conversation.",
+      "setupInstructions": [
+        "Open a Codex desktop chat and type /goal to start Goal mode.",
+        "Use the prompt below as the goal text. Check that the goal progress row appears; an ordinary chat reply alone is not Goal mode.",
+        "Watch progress, then try a clarification or use the progress controls to pause and resume. Keep the app and workspace available while it runs.",
+        "Review the finished files against the completion checklist. If /goal is unavailable, ask the facilitator to check the app version and workspace access."
+      ],
+      "followUpsTitle": "Try a follow-up",
+      "followUps": [
+        "Keep the same goal, but reduce the available budget to S$700. Update all three files and recheck the totals.",
+        "Pause this goal. Summarise what is complete and what remains.",
+        "Resume the goal from where you paused, using the latest budget and requirements."
+      ],
+      "takeaway": "A clear definition of done lets Codex plan, check its work and continue toward an outcome while you steer it.",
+      "references": [
+        {
+          "label": "Goal mode guide",
+          "url": "https://learn.chatgpt.com/docs/long-running-work"
+        }
+      ],
+      "steps": [
+        {
+          "number": 0,
+          "name": "Goal mode prompt",
+          "minutes": 10,
+          "resources": [],
+          "prompt": "Create a goal and keep working until a complete, checked planning pack for a small Singapore community anti-scam roadshow is ready for my review.\n\nOutcome: three local Markdown files — a one-page event plan, a volunteer briefing, and a readiness checklist — for a fictional two-hour Saturday event at a community club serving 40 residents.\n\nConstraints:\n- Use a proposed S$1,000 budget, four volunteers and three activity stations. Label budget figures as planning estimates, not supplier quotes. Leave venue and calendar date as “To confirm”.\n- Research current scam-prevention advice from at least three official Singapore sources. Record URLs and dates checked, and use consistent advice in all three files.\n- Include a timed programme, volunteer responsibilities, an itemised budget, plain-language talking points and a short participant feedback form.\n- Do not contact agencies, book venues, spend money, send emails, publish a site or create a recurring automation.\n\nDefinition of done:\n- All three files exist, are readable and agree on the event duration, staffing, stations and budget.\n- The programme totals 120 minutes, volunteer assignments do not overlap incompatibly, and the budget totals no more than S$1,000.\n- Every factual scam-prevention claim is supported by an official source; missing information and assumptions are labelled.\n- Review the pack, fix inconsistencies, and give me links to the files plus a pass/fail checklist for these criteria.\n\nKeep progressing through research, drafting and checks without needing me to prompt each phase. Pause for a required decision or permission. If a criterion is blocked, report it accurately rather than marking the goal complete."
+        }
+      ]
     }
   ],
   "apiKeySetupPrompt": "Use the OpenAI Developers plugin’s openai-platform-api-key skill to create a new OpenAI API key for my own OpenAI Platform account for this workshop exercise.\n- Open the secure Platform setup flow so I can choose the organisation/project, key name and expiry.\n- Confirm the local destination with me before saving the key as OPENAI_API_KEY in an ignored .env.local file or the appropriate private server secret setting for this project.\n- Keep the key on the server. Never display it in chat, browser code, logs or published files.\n- If the skill or OpenAI Platform connection is unavailable, help me enable/connect it and wait for me to finish; do not claim a key has been created.\n- Once setup is complete, check billing and the models needed for my exercise. Explain the expected API usage and obtain my approval before a small live test. Report only safe setup metadata and the test result."

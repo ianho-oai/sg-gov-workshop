@@ -10,7 +10,7 @@ Suggested prompt to continue:
 
 ## Current state
 
-- Ten sidebar entries: four government workflows grouped under **Choose your adventure**, **Advanced API**, **3D Singapore landmark**, and an **Experience** group with **Computer use**, **Appshots**, **Live voice** and **Create a site**. Experience entries each have one copyable prompt, brief launch instructions and suggested follow-ups; no assignment or workflow tabs.
+- Fifteen sidebar entries: four government workflows grouped under **Choose your adventure**, **Advanced API**, **3D Singapore landmark**, and an **Experience** group with **Computer use**, **Appshots**, **Live voice**, **Create a site**, **Image generation**, **Image reading**, **Subagents**, **Create and use a skill**, and **Goal mode**. Experience entries have brief launch instructions and suggested follow-ups, with no assignment or workflow tabs. The skill activity displays two separately copyable prompts on one page; the others have one. Image reading reuses the citizen-feedback sample photo. Goal mode explains /goal and completion checks.
 - Four standard tracks: citizen feedback, grant review, scam education and JC Economics.
 - Citizen feedback: Setup (0) → Your assignment → meeting summary (1) → annotated-image brainstorm (2) → costed proposal (3) → historical analysis and revised proposal (4) → filterable dashboard with optional Responses API sub-topic summary (5) → senior-director email (6) → daily email-summary automation (7) → project status site (8).
 - Grant review: Setup (0) → Your assignment → criteria transcript and proposed rubric (1) → official-source research and generated criteria visual (2) → evaluate 20 proposals and write recommendations (3) → analyse 300 historical awards (4) → combined comparison dashboard/visualisation (5) → five personalised acceptance emails (6) → grant-process and funnel site (7). There is no separate Visualisation or Automation step in this track.
@@ -25,7 +25,7 @@ Suggested prompt to continue:
 
 - Dark, ChatGPT-like layout and readable large text. A persistent top notice states this is not the real ChatGPT app and only contains workshop instructions.
 - The header includes a Live discussion link beside Guide, with a slow red pulse and reduced-motion support, opening https://openai-singapore-dialogue.ianhojy.chatgpt.site in a new tab. Reset session progress is a bordered button on desktop and mobile.
-- How this workshop works stays brief: Choose your adventure for a full workflow, or Experience for a quick, single-prompt try-out. If you’re bored, try Advanced API. Keep Replay walkthrough and Got it.
+- How this workshop works stays brief: Choose your adventure for a full workflow, or Experience for a quick feature try-out. If you’re bored, try Advanced API. Keep Replay walkthrough and Got it.
 - One track corresponds to one continuous conversation in the participant's actual ChatGPT/Codex session.
 - Task objectives are visible by default; proposed prompts stay collapsed until **Expand model answer** is clicked.
 - Prompts copy as written, without upload placeholders or instructions to paste previous answers again. The landmark location is the intentional placeholder exception.
@@ -66,7 +66,7 @@ For UI changes, verify:
 1. A fresh browser context shows the six-step tour; each spotlight and card fit at desktop and mobile widths.
 2. Finishing, skipping or pressing Escape restores the original track/step; reload does not repeat the tour.
 3. How this workshop works → Replay walkthrough starts it again.
-4. Choose your adventure expands/collapses; all ten sidebar entries open correctly.
+4. Choose your adventure expands/collapses; all fifteen sidebar entries open correctly.
 5. Setup → Your assignment → task navigation works with both tabs and arrows.
 6. Resource downloads succeed, model prompts expand and copy, and all email instructions use Gmail.
 7. Advanced API and landmark deep links work. The landmark placeholder is highlighted visually but copied as plain text.
