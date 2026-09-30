@@ -1354,6 +1354,38 @@ window.WORKSHOP_DATA = {
           "prompt": "Create a goal and keep working until a complete, checked planning pack for a small Singapore community anti-scam roadshow is ready for my review.\n\nOutcome: three local Markdown files — a one-page event plan, a volunteer briefing, and a readiness checklist — for a fictional two-hour Saturday event at a community club serving 40 residents.\n\nConstraints:\n- Use a proposed S$1,000 budget, four volunteers and three activity stations. Label budget figures as planning estimates, not supplier quotes. Leave venue and calendar date as “To confirm”.\n- Research current scam-prevention advice from at least three official Singapore sources. Record URLs and dates checked, and use consistent advice in all three files.\n- Include a timed programme, volunteer responsibilities, an itemised budget, plain-language talking points and a short participant feedback form.\n- Do not contact agencies, book venues, spend money, send emails, publish a site or create a recurring automation.\n\nDefinition of done:\n- All three files exist, are readable and agree on the event duration, staffing, stations and budget.\n- The programme totals 120 minutes, volunteer assignments do not overlap incompatibly, and the budget totals no more than S$1,000.\n- Every factual scam-prevention claim is supported by an official source; missing information and assumptions are labelled.\n- Review the pack, fix inconsistencies, and give me links to the files plus a pass/fail checklist for these criteria.\n\nKeep progressing through research, drafting and checks without needing me to prompt each phase. Pause for a required decision or permission. If a criterion is blocked, report it accurately rather than marking the goal complete."
         }
       ]
+    },
+    {
+      "id": "experience-visualize",
+      "name": "Visualize",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "Codex",
+      "description": "Explore a community budget with an interactive visual inside your chat. Move sliders and see the trade-offs immediately.",
+      "setupTitle": "Try an interactive “what if?”",
+      "setupNote": "No API key or file upload is needed. These costs are fictional workshop assumptions, not government estimates or supplier quotes.",
+      "setupInstructions": [
+        "Open a Codex chat with the Visualize skill available. Copy the prompt below; it explicitly names visualize:visualize.",
+        "When the interactive visual appears in the conversation, move the three budget sliders. Watch the allocation, remaining budget and quantities change.",
+        "Try going over budget, then bring the total back under S$100,000. Use Reset to return to the starting scenario.",
+        "Ask for a change using one of the follow-ups below. If Visualize is unavailable, ask the facilitator to help enable it."
+      ],
+      "followUpsTitle": "Change the scenario",
+      "followUps": [
+        "Update the same interactive visual for a total budget of S$80,000. Keep my existing allocations and show whether I am now over budget.",
+        "Add a unit-cost control for shelters so I can vary the cost from S$15,000 to S$30,000 and see how many fit in the allocation.",
+        "Compare these two scenarios in the visual: A allocates S$30,000 to benches, S$40,000 to shelters and S$20,000 to lighting; B allocates S$20,000, S$60,000 and S$20,000 respectively. Show the quantities and remaining budget for each."
+      ],
+      "takeaway": "Notice how changing a control updates the visual immediately, while a follow-up prompt changes what the interactive tool can do.",
+      "steps": [
+        {
+          "number": 0,
+          "name": "Visualize prompt",
+          "minutes": 5,
+          "resources": [],
+          "prompt": "Use the visualize:visualize skill to create an interactive community-budget explorer directly in this conversation. I want to explore trade-offs for a fictional Singapore estate improvement project.\n\n- Total budget: S$100,000. Three spending categories: benches, sheltered rest areas and lighting upgrades. Start with allocations of S$30,000, S$40,000 and S$20,000 respectively, leaving S$10,000 unallocated.\n- Provide one labelled slider per category, from S$0 to S$100,000 in S$1,000 increments, with the current amount visible. Include a Reset button for the starting allocations.\n- Show the allocation in a compact stacked bar with clear labels and SGD amounts, plus total allocated and remaining budget. Allow over-allocation so I can explore it: when spending exceeds S$100,000, show the over-budget amount clearly rather than hiding it or silently rebalancing the sliders. Keep any budget marker and chart scale honest.\n- Use these fictional unit costs: S$2,000 per bench, S$20,000 per sheltered rest area and S$5,000 per lighting upgrade. For each category show the whole units affordable, rounding down, and any allocation left after those whole units. Do not present these quantities as measured social impact.\n- Update the chart and quantities immediately when I move a slider. Label the costs as fictional assumptions. Keep the visual readable on a narrow screen and make the controls usable with a keyboard.\n- Check the starting totals, an all-zero allocation, an exactly-on-budget scenario and an over-budget scenario before showing the result.\n- Render the working interactive visual here in the chat. No external data or API calls are needed, and do not publish a separate site. If the Visualize skill is unavailable, tell me rather than substituting a static image."
+        }
+      ]
     }
   ],
   "apiKeySetupPrompt": "Use the OpenAI Developers plugin’s openai-platform-api-key skill to create a new OpenAI API key for my own OpenAI Platform account for this workshop exercise.\n- Open the secure Platform setup flow so I can choose the organisation/project, key name and expiry.\n- Confirm the local destination with me before saving the key as OPENAI_API_KEY in an ignored .env.local file or the appropriate private server secret setting for this project.\n- Keep the key on the server. Never display it in chat, browser code, logs or published files.\n- If the skill or OpenAI Platform connection is unavailable, help me enable/connect it and wait for me to finish; do not claim a key has been created.\n- Once setup is complete, check billing and the models needed for my exercise. Explain the expected API usage and obtain my approval before a small live test. Report only safe setup metadata and the test result."

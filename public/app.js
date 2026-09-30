@@ -116,7 +116,7 @@ $('help').addEventListener('click',()=>$('help-dialog').showModal());$('close-he
 
 const tourSteps=[
  {target:'#adventure-group',title:'Choose your adventure',description:'Choose a government adventure for a full, multi-step workflow. For a quick feature try-out instead, use Experience below.'},
- {target:'#experience-group > summary',title:'Just want to try a feature?',description:'Open Experience for quick activities: images, Appshots, Computer use, Live voice, Sites, Subagents, Skills and Goal mode. Pick one and follow its launch instructions. Create and use a skill has two short prompts in the same chat.'},
+ {target:'#experience-group > summary',title:'Just want to try a feature?',description:'Open Experience for quick activities: images, interactive visuals, Appshots, Computer use, Live voice, Sites, Subagents, Skills and Goal mode. Pick one and follow its launch instructions. Create and use a skill has two short prompts in the same chat.'},
  {target:'#next',title:'Move through the steps',description:'Click the right arrow below the task to continue. The left arrow takes you back, and the numbered tabs let you jump to any step.'},
  {target:'#prompt-resources',title:'Download your resources',description:'Click each file to download it, then upload it to your ChatGPT conversation before starting the task. Resources appear only where you need them.'},
  {target:'.model-answer > summary',title:'Reveal the model prompt',description:'Read Your Task and try your own prompt first. For help, click Expand model answer, then Copy prompt and paste it into the same ChatGPT conversation.'},
