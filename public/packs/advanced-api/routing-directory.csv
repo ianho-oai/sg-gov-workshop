@@ -1,6 +1,0 @@
-team_id,team_name,handles,handoff_details
-ACCOUNT,Account Support,Sign-in problems; profile changes; account access,Problem description and affected sign-in step. Never passwords or one-time codes.
-BILLING,Billing Team,Invoices; duplicate charges; payment queries,Invoice or order reference and transaction dates. Never full payment-card details.
-BOOKINGS,Booking Support,Rescheduling; cancellations; booking availability,Booking reference and requested change.
-TECH,Technical Support,App errors; failed uploads; technical faults,Error message time browser version and steps already tried.
-CARE,Customer Care,Complaints; unclear enquiries; issues outside the database,Enquiry summary and any existing reference. Ask for clarification when needed.
