@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const data=window.WORKSHOP_DATA,$=id=>document.getElementById(id),storageKey='sg-workshop-sessions-v3';
-let adventureOpen=true;
+let adventureOpen=true,experienceOpen=true;
 const tourKey='sg-workshop-tour-v1';
 let tour=null,tourFrame=0;
 const adventureIds=new Set(['citizen-feedback','grant-review','scam-education','jc-economics']);
@@ -10,6 +10,7 @@ try{const saved=JSON.parse(localStorage.getItem(storageKey)||JSON.stringify(Obje
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const provider={plugin:'Gmail',image:'assets/gmail-setup.png',selection:'Select Gmail — Read and manage Gmail, as shown below.'};
 function promptText(s){return s.prompt;}
+const destination=t=>t.target||(['api','prompt'].includes(t.kind)?'Codex':'ChatGPT');
 const copyIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>';
 const features=[
  {id:'new-chat',name:'New chat',icon:'<path d="M12 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-7M16 3l5 5M10 14l-1 4 4-1L22 8l-5-5z"/>',description:'Start a fresh conversation for a new question or task.',example:'For this workshop, use a separate chat for each track and keep its prompts together.'},
@@ -65,16 +66,22 @@ function render(){
  const tabFocused=document.activeElement?.matches('[role="tab"]');
  const raw=location.hash.replace(/^#/,'').split('/');current=data.tracks.find(t=>t.id===raw[0])||data.tracks[0];step=raw[1]==='assignment'?'assignment':Math.max(0,Math.min(lastStep(current.id),parseInt(raw[1],10)||0));positions[current.id]=step;
  try{localStorage.setItem(storageKey,JSON.stringify(positions));}catch{}
- const s=step==='assignment'?{resources:[],prompt:''}:current.steps[step];document.querySelector('.prompt-pagination>div>span').textContent='Continue in the same '+(['api','prompt'].includes(current.kind)?'Codex':'ChatGPT')+' conversation';document.title=current.name+' · Workshop chat';$('track-title').textContent=current.name;$('track-description').textContent=current.description;
+ const s=step==='assignment'?{resources:[],prompt:''}:current.steps[step];document.querySelector('.prompt-pagination>div>span').textContent='Continue in the same '+destination(current)+' conversation';document.title=current.name+' · Workshop chat';$('track-title').textContent=current.name;$('track-description').textContent=current.description;
  const trackButton=t=>`<button class="track-button ${t.id===current.id?'active':''}" data-track="${t.id}" ${t.id===current.id?'aria-current="page"':''}><span class="chat-title">${escape(t.name)}</span><span class="session-position">${t.kind==='prompt'?'Prompt':savedStep(t.id)===0?'Setup':savedStep(t.id)==='assignment'?'Assignment':savedStep(t.id)+'/'+lastStep(t.id)}</span></button>`;
- $('track-nav').innerHTML=`<details id="adventure-group" class="adventure-group ${adventureIds.has(current.id)?'contains-active':''}" ${adventureOpen?'open':''}><summary><svg class="adventure-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg><span>Choose your adventure</span></summary><div class="adventure-tracks">${data.tracks.filter(t=>adventureIds.has(t.id)).map(trackButton).join('')}</div></details>${data.tracks.filter(t=>!adventureIds.has(t.id)).map(trackButton).join('')}`;
+ $('track-nav').innerHTML=`<details id="adventure-group" class="adventure-group ${adventureIds.has(current.id)?'contains-active':''}" ${adventureOpen?'open':''}><summary><svg class="adventure-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg><span>Choose your adventure</span></summary><div class="adventure-tracks">${data.tracks.filter(t=>adventureIds.has(t.id)).map(trackButton).join('')}</div></details>${data.tracks.filter(t=>!adventureIds.has(t.id)&&t.group!=='experience').map(trackButton).join('')}<details id="experience-group" class="adventure-group experience-group ${current.group==='experience'?'contains-active':''}" ${experienceOpen?'open':''}><summary><svg class="adventure-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg><span>Experience</span></summary><div class="adventure-tracks">${data.tracks.filter(t=>t.group==='experience').map(trackButton).join('')}</div></details>`;
  $('adventure-group').addEventListener('toggle',e=>{if(e.target.isConnected)adventureOpen=e.target.open;});
+ $('experience-group').addEventListener('toggle',e=>{if(e.target.isConnected)experienceOpen=e.target.open;});
 
  const promptOnly=current.kind==='prompt';$('step-tabs').hidden=promptOnly;document.querySelector('.navigation-area').hidden=promptOnly;
  if(promptOnly){
   step=0;positions[current.id]=0;
-  $('messages').removeAttribute('aria-labelledby');$('messages').setAttribute('aria-label','Landmark prompt');
-  $('messages').innerHTML=`${current.caution?`<aside class="workflow-caution" role="note" aria-label="Caution"><strong>Caution — run this at the end</strong><p>${escape(current.caution)}</p></aside>`:''}${current.setupInstructions?`<section class="setup-guide landmark-setup"><h2>Tools Codex should download and set up</h2><ol>${current.setupInstructions.map(item=>`<li>${escape(item)}</li>`).join('')}</ol><p>These setup instructions are included in the copyable prompt below.</p></section>`:''}<section class="message-block"><div class="user-message"><div class="message-header"><strong>Landmark prompt</strong><button class="copy-btn" data-copy="0" aria-label="Copy landmark prompt">${copyIcon} Copy prompt</button></div><div class="prompt-content" id="prompt-0" tabindex="0" aria-label="Prompt text">${escape(current.steps[0].prompt).replace(escape("<insert your Singapore location here>"), '<mark class="location-placeholder" title="Replace this with your chosen Singapore location">'+escape("<insert your Singapore location here>")+'</mark>')}</div></div></section>`;
+  $('messages').removeAttribute('aria-labelledby');$('messages').setAttribute('aria-label',current.steps[0].name);
+  $('messages').innerHTML=`${current.caution?`<aside class="workflow-caution" role="note" aria-label="Caution"><strong>Caution — run this at the end</strong><p>${escape(current.caution)}</p></aside>`:''}${current.setupInstructions?`<section class="setup-guide landmark-setup"><h2>${escape(current.setupTitle||'Tools Codex should download and set up')}</h2><ol>${current.setupInstructions.map(item=>`<li>${escape(item)}</li>`).join('')}</ol><p>${escape(current.setupNote||'These setup instructions are included in the copyable prompt below.')}</p></section>`:''}<section class="message-block"><div class="user-message"><div class="message-header"><strong>${escape(current.steps[0].name)}</strong><button class="copy-btn" data-copy="0" aria-label="Copy ${escape(current.name)} prompt">${copyIcon} Copy prompt</button></div><div class="prompt-content" id="prompt-0" tabindex="0" aria-label="Prompt text">${escape(current.steps[0].prompt).replace(escape("<insert your Singapore location here>"), '<mark class="location-placeholder" title="Replace this with your chosen Singapore location">'+escape("<insert your Singapore location here>")+'</mark>')}</div></div></section>`;
+  if(current.group==='experience'){
+   const card=$('messages').querySelector('.user-message');
+   if(current.spokenStarter)card.insertAdjacentHTML('beforebegin',`<section class="experience-starter"><h2>Try saying this to start</h2><blockquote>${escape(current.spokenStarter)}</blockquote></section>`);
+   card.insertAdjacentHTML('afterend',`<section class="experience-followups"><h2>${escape(current.followUpsTitle)}</h2><ul>${current.followUps.map(item=>`<li>“${escape(item)}”</li>`).join('')}</ul><p>${escape(current.takeaway)}</p>${current.references?`<p>${current.references.map(ref=>`<a href="${escape(ref.url)}" target="_blank" rel="noopener noreferrer">${escape(ref.label)}</a>`).join(' · ')}</p>`:''}</section>`);
+  }
   return;
  }
  $('messages').removeAttribute('aria-label');
@@ -100,7 +107,7 @@ document.addEventListener('click',async e=>{
  const stage=e.target.closest('[data-step]');if(stage){navigate(current.id,stage.dataset.step==='assignment'?'assignment':Number(stage.dataset.step));return;}
  const copy=e.target.closest('[data-copy],[data-copy-bonus],[data-copy-api-setup]');if(!copy)return;const text=copy.hasAttribute('data-copy-api-setup')?data.apiKeySetupPrompt:copy.hasAttribute('data-copy-bonus')?current.steps[Number(copy.dataset.copyBonus)].apiBonus.prompt:promptText(current.steps[Number(copy.dataset.copy)]);let copied=false;
  try{await navigator.clipboard.writeText(text);copied=true;}catch{const input=document.createElement('textarea');input.value=text;input.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(input);input.select();try{copied=document.execCommand('copy');}catch{}input.remove();}
- if(copied){copy.textContent='✓ Copied';toast('Copied. Paste directly into your '+(copy.hasAttribute('data-copy-api-setup')||['api','prompt'].includes(current.kind)?'Codex':'ChatGPT')+' conversation.');setTimeout(()=>{if(copy.isConnected)copy.innerHTML=copyIcon+(copy.hasAttribute('data-copy-api-setup')?' Copy API setup prompt':' Copy prompt');},2200);}else{const parent=copy.closest('.user-message');let input=parent.querySelector('textarea');if(!input){input=document.createElement('textarea');input.className='manual-copy';input.setAttribute('aria-label','Select and copy this prompt');parent.append(input);}input.value=text;input.focus();input.select();toast('Select and copy the prompt with Cmd+C or Ctrl+C.');}
+ if(copied){copy.textContent='✓ Copied';toast('Copied. Paste directly into your '+(copy.hasAttribute('data-copy-api-setup')?'Codex':destination(current))+' conversation.');setTimeout(()=>{if(copy.isConnected)copy.innerHTML=copyIcon+(copy.hasAttribute('data-copy-api-setup')?' Copy API setup prompt':' Copy prompt');},2200);}else{const parent=copy.closest('.user-message');let input=parent.querySelector('textarea');if(!input){input=document.createElement('textarea');input.className='manual-copy';input.setAttribute('aria-label','Select and copy this prompt');parent.append(input);}input.value=text;input.focus();input.select();toast('Select and copy the prompt with Cmd+C or Ctrl+C.');}
 });
 $('previous').addEventListener('click',()=>move(-1));$('next').addEventListener('click',()=>move(1));
 document.addEventListener('keydown',e=>{if(tour)return;if(e.key==='Escape'){dismissedTip=document.activeElement?.dataset.feature;hideTip();return;}if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||$('help-dialog').open||e.target.closest('input,textarea,[contenteditable="true"],.prompt-content'))return;if(e.target.matches('[role="tab"]')&&(e.key==='Home'||e.key==='End')){e.preventDefault();navigate(current.id,e.key==='Home'?0:lastStep(current.id));return;}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();move(e.key==='ArrowLeft'?-1:1);}});
@@ -108,11 +115,12 @@ $('reset').addEventListener('click',()=>{positions={};try{localStorage.removeIte
 $('help').addEventListener('click',()=>$('help-dialog').showModal());$('close-help').addEventListener('click',()=>$('help-dialog').close());$('understood').addEventListener('click',()=>$('help-dialog').close());window.addEventListener('hashchange',()=>{if(tour)finishTour();render();});render();
 
 const tourSteps=[
- {target:'#adventure-group',title:'Choose your adventure',description:'Open this group and pick one of the four government workflows. Complete Setup, then read Your assignment to understand your role and goal.'},
+ {target:'#adventure-group',title:'Choose your adventure',description:'Choose a government adventure for a full, multi-step workflow. For a quick feature try-out instead, use Experience below.'},
+ {target:'#experience-group',title:'Just want to try a feature?',description:'Open Experience for quick, standalone prompts. Try Computer use to compare flights, or Live voice to talk about dinner and weather. Pick one, copy the prompt and follow its short instructions—no multi-step workflow needed.'},
  {target:'#next',title:'Move through the steps',description:'Click the right arrow below the task to continue. The left arrow takes you back, and the numbered tabs let you jump to any step.'},
  {target:'#prompt-resources',title:'Download your resources',description:'Click each file to download it, then upload it to your ChatGPT conversation before starting the task. Resources appear only where you need them.'},
  {target:'.model-answer > summary',title:'Reveal the model prompt',description:'Read Your Task and try your own prompt first. For help, click Expand model answer, then Copy prompt and paste it into the same ChatGPT conversation.'},
- {target:'[data-track="advanced-api"]',title:'Ready for a harder challenge?',description:'Choose Advanced API to build an assistant with OpenAI APIs, including image generation and live voice. This track uses Codex and requires an API key.'}
+ {target:'[data-track="advanced-api"]',title:'Ready for a harder challenge?',description:'Choose Advanced API to build an assistant with OpenAI APIs, with voice intake, researched answers and an admin dashboard. This track uses Codex and requires an API key.'}
 ];
 function positionTour(){
  if(!tour)return;
@@ -136,8 +144,8 @@ function showTourStep(){
  if(!tour)return;
  const item=tourSteps[tour.index];
  // Preview a resource-bearing step without changing saved workshop progress.
- history.replaceState(null,'',tour.url.split('#')[0]+'#'+tour.track+'/'+(tour.index===1?0:1));
- adventureOpen=true;render();positions={...tour.positions};
+ history.replaceState(null,'',tour.url.split('#')[0]+'#'+tour.track+'/'+(item.target==='#next'?0:1));
+ adventureOpen=true;experienceOpen=true;render();positions={...tour.positions};
  try{localStorage.setItem(storageKey,JSON.stringify(positions));}catch{}
  $('tour-count').textContent='QUICK TOUR · '+(tour.index+1)+' / '+tourSteps.length;
  $('tour-title').textContent=item.title;$('tour-description').textContent=item.description;
@@ -149,13 +157,13 @@ function showTourStep(){
 function startTour(){
  if(tour)return;
  hideTip();
- tour={index:0,url:location.href,positions:{...positions},track:adventureIds.has(current.id)?current.id:'citizen-feedback',adventureOpen,scrollX,scrollY,sidebarScroll:document.querySelector('.sidebar').scrollTop,focus:document.activeElement};
+ tour={index:0,url:location.href,positions:{...positions},track:adventureIds.has(current.id)?current.id:'citizen-feedback',adventureOpen,experienceOpen,scrollX,scrollY,sidebarScroll:document.querySelector('.sidebar').scrollTop,focus:document.activeElement};
  $('walkthrough').showModal();showTourStep();
 }
 function finishTour(){
  if(!tour)return;
  const previous=tour;tour=null;cancelAnimationFrame(tourFrame);$('walkthrough').close();
- history.replaceState(null,'',previous.url);positions=previous.positions;adventureOpen=previous.adventureOpen;render();
+ history.replaceState(null,'',previous.url);positions=previous.positions;adventureOpen=previous.adventureOpen;experienceOpen=previous.experienceOpen;render();
  try{localStorage.setItem(tourKey,'seen');}catch{}
  document.querySelector('.sidebar').scrollTop=previous.sidebarScroll;
  if(previous.focus?.isConnected&&previous.focus!==document.body)previous.focus.focus({preventScroll:true});

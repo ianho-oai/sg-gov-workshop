@@ -10,7 +10,7 @@ Suggested prompt to continue:
 
 ## Current state
 
-- Six sidebar entries: four government workflows grouped under **Choose your adventure**, plus **Advanced API** and **3D Singapore landmark**.
+- Eight sidebar entries: four government workflows grouped under **Choose your adventure**, **Advanced API**, **3D Singapore landmark**, and an **Experience** group with **Computer use** and **Live voice**. Experience entries each have one copyable prompt, brief launch instructions and suggested follow-ups; no assignment or workflow tabs.
 - Four standard tracks: citizen feedback, grant review, scam education and JC Economics.
 - Citizen feedback: Setup (0) → Your assignment → meeting summary (1) → annotated-image brainstorm (2) → costed proposal (3) → historical analysis and revised proposal (4) → filterable dashboard with optional Responses API sub-topic summary (5) → senior-director email (6) → daily email-summary automation (7) → project status site (8).
 - Grant review: Setup (0) → Your assignment → criteria transcript and proposed rubric (1) → official-source research and generated criteria visual (2) → evaluate 20 proposals and write recommendations (3) → analyse 300 historical awards (4) → combined comparison dashboard/visualisation (5) → five personalised acceptance emails (6) → grant-process and funnel site (7). There is no separate Visualisation or Automation step in this track.
@@ -19,13 +19,13 @@ Suggested prompt to continue:
 - Grant review has four resources: two Word documents, the 20-applicant workbook and the historical-awards workbook. Citizen feedback has five; Scam education and JC Economics each have three. Resources appear at the relevant task, above its instructions.
 - Advanced API has setup, a standalone assignment and one open-ended build task. It includes five CSVs and covers resident voice intake, API transcription, researched answers and an admin dashboard with categorisation, summaries and charts. API setup lets participants unlock and copy the facilitator key with a shared password; participant-owned key setup remains an optional fallback.
 - The landmark workflow has visible Blender/FFmpeg/ffprobe setup instructions and one copyable prompt with the same instructions and a highlighted `<insert your Singapore location here>` placeholder. Preserve its CPU caution and end-of-workshop timing.
-- Latest addition: an automatic first-visit walkthrough highlighting Choose your adventure, Next, downloads, Expand model answer and Advanced API. It supports Back, Skip and replay from How this workshop works. It restores the original route and progress when closed.
+- Latest addition: an automatic first-visit walkthrough highlighting Choose your adventure, Experience, Next, downloads, Expand model answer and Advanced API. It supports Back, Skip and replay from How this workshop works. It restores the original route and progress when closed.
 
 ## Preserve these interaction decisions
 
 - Dark, ChatGPT-like layout and readable large text. A persistent top notice states this is not the real ChatGPT app and only contains workshop instructions.
 - The header includes a Live discussion link beside Guide, with a slow red pulse and reduced-motion support, opening https://openai-singapore-dialogue.ianhojy.chatgpt.site in a new tab. Reset session progress is a bordered button on desktop and mobile.
-- How this workshop works stays brief: Choose your adventure. If you’re bored, try Advanced API. Keep Replay walkthrough and Got it.
+- How this workshop works stays brief: Choose your adventure for a full workflow, or Experience for a quick, single-prompt try-out. If you’re bored, try Advanced API. Keep Replay walkthrough and Got it.
 - One track corresponds to one continuous conversation in the participant's actual ChatGPT/Codex session.
 - Task objectives are visible by default; proposed prompts stay collapsed until **Expand model answer** is clicked.
 - Prompts copy as written, without upload placeholders or instructions to paste previous answers again. The landmark location is the intentional placeholder exception.
@@ -63,10 +63,10 @@ Use Node.js 22.16+. No credentials are required for the static guide. Run `npm t
 
 For UI changes, verify:
 
-1. A fresh browser context shows the five-step tour; each spotlight and card fit at desktop and mobile widths.
+1. A fresh browser context shows the six-step tour; each spotlight and card fit at desktop and mobile widths.
 2. Finishing, skipping or pressing Escape restores the original track/step; reload does not repeat the tour.
 3. How this workshop works → Replay walkthrough starts it again.
-4. Choose your adventure expands/collapses; all six tracks open correctly.
+4. Choose your adventure expands/collapses; all eight sidebar entries open correctly.
 5. Setup → Your assignment → task navigation works with both tabs and arrows.
 6. Resource downloads succeed, model prompts expand and copy, and all email instructions use Gmail.
 7. Advanced API and landmark deep links work. The landmark placeholder is highlighted visually but copied as plain text.

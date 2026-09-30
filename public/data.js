@@ -1012,6 +1012,74 @@ window.WORKSHOP_DATA = {
         "Use a project-local Python environment only if additional image or overlay packages are needed. Codex should install the required packages there, record versions and run a small test render before the full scene.",
         "Keep the computer powered and allow time and disk space for the 480-frame image sequence. Run this workflow at the end: modelling and rendering can use a lot of CPU."
       ]
+    },
+    {
+      "id": "experience-computer-use",
+      "name": "Computer use",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "Codex",
+      "description": "Watch Codex use a browser to compare flights, change filters and explain the trade-offs.",
+      "setupTitle": "Try it in Codex",
+      "setupNote": "Copy the prompt below into a new Codex chat. This example uses Singapore → Tokyo; you can change the destination or dates in the prompt.",
+      "setupInstructions": [
+        "Switch to Codex and use a workspace with computer-use/browser controls available.",
+        "Paste the prompt and watch it operate Google Flights: fill the search, use filters and inspect results.",
+        "If browser access needs setup, follow Codex’s instructions. You do not need an API key for this activity."
+      ],
+      "followUpsTitle": "Change your mind while it works",
+      "followUps": [
+        "Actually, include one-stop flights and show how much I could save.",
+        "Keep the original dates, but make the budget S$700. Update the shortlist."
+      ],
+      "takeaway": "Notice how Codex translates your request into clicks and form entries, checks what the page shows, and adapts when you change the criteria.",
+      "steps": [
+        {
+          "number": 0,
+          "name": "Computer use prompt",
+          "minutes": 5,
+          "resources": [],
+          "prompt": "Use your computer-use/browser controls to operate Google Flights (https://www.google.com/travel/flights) and help me compare a short holiday from Singapore to Tokyo.\n\n- Search for one adult, return economy, from Singapore (SIN) to Tokyo (any airport). Depart on the first Friday of next month and return on the following Monday. State the exact dates and year before searching, using Singapore time.\n- Use the website interface: enter the route and dates, set the currency to SGD, apply a nonstop filter and inspect the flight results. Show the browser so I can follow the clicks and changes.\n- Find up to three useful options, aiming for a total return fare below S$900. Compare total fare, airline, airports, local departure/arrival times, duration and baggage information actually shown. Label details that need checking; do not invent unavailable fares or inclusions.\n- Try shifting the trip by one day using the date grid or calendar, and explain whether that improves the price. Keep the original-date options in the comparison.\n- Give me a short recommendation with the search link and a screenshot of the relevant results. Treat prices as a snapshot that may change.\n- Pause before any booking or payment. If computer use is unavailable or the site blocks access, explain the blocker and help me enable the required browser capability; do not pretend to have operated the page."
+        }
+      ]
+    },
+    {
+      "id": "experience-live-voice",
+      "name": "Live voice",
+      "kind": "prompt",
+      "group": "experience",
+      "target": "ChatGPT",
+      "description": "Talk through dinner plans, interrupt naturally, and ask about nearby restaurants and the weather.",
+      "setupTitle": "Start a live conversation",
+      "setupNote": "Copy the prompt into ChatGPT, then start Voice in the same conversation. Or start Voice first and say the opening example below.",
+      "setupInstructions": [
+        "Open ChatGPT and select the Voice control in the message bar. Allow microphone access if prompted.",
+        "Choose Live in Settings → Voice if that option is available. Available voice options depend on your account and workspace.",
+        "Speak naturally. While ChatGPT is answering, try one of the interruptions below. End the call when you are done and review the conversation in text."
+      ],
+      "spokenStarter": "I’m near City Hall MRT in Singapore. Help me find somewhere good for dinner tonight for two, around S$40 each. Ask me about the food I like, and check whether it’ll rain when we walk there.",
+      "followUpsTitle": "Interrupt while ChatGPT is speaking",
+      "followUps": [
+        "Actually, make that S$25 each, and one of us is vegetarian.",
+        "Wait—will it be raining around 7 p.m.? Pick somewhere with indoor seating and a sheltered route if you can verify one.",
+        "Slow down. Just compare your best two options, then let me choose."
+      ],
+      "takeaway": "Notice how it carries your preferences forward, switches direction after an interruption and combines a spoken conversation with current research.",
+      "references": [
+        {
+          "label": "ChatGPT Voice guide",
+          "url": "https://help.openai.com/en/articles/20001274-chatgpt-voice"
+        }
+      ],
+      "steps": [
+        {
+          "number": 0,
+          "name": "Live voice prompt",
+          "minutes": 5,
+          "resources": [],
+          "prompt": "Help me plan dinner through a live conversation. I’m near City Hall MRT in Singapore, looking for dinner tonight for two people at around S$40 per person. Use Singapore time and confirm the calendar date you mean by tonight.\n\n- Start by asking one short question about my preferred food or dietary needs. Keep your spoken replies brief and conversational so I can respond.\n- Search for three suitable nearby restaurants. Check current opening hours, location, menu prices and recent evidence for your recommendations. Explain the trade-offs and put useful source links in the chat.\n- Check the latest local weather forecast for this evening, including around 7 p.m. Explain the rain risk and forecast uncertainty, then suggest an indoor option and a sheltered route only if you can verify it.\n- I may interrupt or change the budget, dietary needs or location while you are talking. Follow my latest request, keep the other preferences and update your recommendation.\n- Ask me to choose between your best two options. End with a short written recap of the restaurant, estimated budget, address and weather plan. Do not make a reservation.\n- If live search or weather information is unavailable, say so clearly and tell me what needs checking instead of presenting guesses as current facts."
+        }
+      ]
     }
   ],
   "apiKeySetupPrompt": "Use the OpenAI Developers plugin’s openai-platform-api-key skill to create a new OpenAI API key for my own OpenAI Platform account for this workshop exercise.\n- Open the secure Platform setup flow so I can choose the organisation/project, key name and expiry.\n- Confirm the local destination with me before saving the key as OPENAI_API_KEY in an ignored .env.local file or the appropriate private server secret setting for this project.\n- Keep the key on the server. Never display it in chat, browser code, logs or published files.\n- If the skill or OpenAI Platform connection is unavailable, help me enable/connect it and wait for me to finish; do not claim a key has been created.\n- Once setup is complete, check billing and the models needed for my exercise. Explain the expected API usage and obtain my approval before a small live test. Report only safe setup metadata and the test result."
